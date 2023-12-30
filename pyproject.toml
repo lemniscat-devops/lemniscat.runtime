@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lemniscat.runtime"
+version = "0.0.1"
+authors = [
+  { name="Philippe MORISSEAU", email="philippe.morisseau@outlook.com" },
+]
+description = "A runtime to provide product oriented in DevOps approach"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dynamic = ["dependencies"]
+
+[project.scripts]
+lem = "lemniscat.runtime:lem"
+
+[project.urls]
+Homepage = "https://github.com/lemniscat-devops/lemniscat.runtime"
+Issues = "https://github.com/lemniscat-devops/lemniscat.runtime/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["lemniscat.runtime*"]
+namespaces = true
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["src/lemniscat/requirements.txt"]}

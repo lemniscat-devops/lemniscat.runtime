@@ -1,0 +1,37 @@
+---
+capabilities:
+  code: null
+  build: null
+  test: null
+  release: null
+  deploy: null
+  operate:
+    - solution: Azure
+      tasks:
+        - task: terraform
+          displayName: 'Terraform init'
+          steps:
+            - pre
+            - run
+          parameters:
+            action: init
+            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+        - task: terraform
+          displayName: 'Terraform plan'
+          steps:
+            - pre
+          parameters:
+            action: plan
+            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+        - task: terraform
+          displayName: 'Terraform apply'
+          steps:
+            - run
+          parameters:
+            action: apply
+            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+  monitor: null
+  plan: null
+requirements:
+  - name: lemniscat.plugin.terraform
+    version: 0.0.13
