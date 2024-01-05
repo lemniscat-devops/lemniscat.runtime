@@ -26,6 +26,9 @@ class StepsParser:
             for capability in capabilities:
                 for step in steps:
                     self._steps.append(f'{capability}.{step}')
+                    
+    def get(self, step: str, capability: str) -> bool:
+        return bool(any(item in f'{capability}.{step}' for item in self._steps))
 
     def get_pre(self, capability: str) -> bool:
         return bool(any(item in f'{capability}.pre' for item in self._steps))

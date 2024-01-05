@@ -13,6 +13,7 @@ capabilities:
           steps:
             - pre
             - run
+            - decom
           parameters:
             action: init
             tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
@@ -23,6 +24,7 @@ capabilities:
           parameters:
             action: plan
             tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+            tfVarFile: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\variables.tfvars.json
         - task: terraform
           displayName: 'Terraform apply'
           steps:
@@ -30,8 +32,16 @@ capabilities:
           parameters:
             action: apply
             tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+        - task: terraform
+          displayName: 'Terraform destroy'
+          steps:
+            - decom
+          parameters:
+            action: destroy
+            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+            tfVarFile: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\variables.tfvars.json
   monitor: null
   plan: null
 requirements:
   - name: lemniscat.plugin.terraform
-    version: 0.0.13
+    version: 0.1.0.9

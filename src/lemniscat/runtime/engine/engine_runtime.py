@@ -5,7 +5,8 @@ from .engine_manifest import StepsParser
 from .engine_variables import BagOfVariables
 from lemniscat.runtime.plugin.pluginmanager import PluginManager
 from lemniscat.core.util.helpers import LogUtil, FileSystem
-from lemniscat.runtime.model.models import Capabilities, Solution
+from lemniscat.core.model import TaskResult
+from lemniscat.runtime.model.models import Capabilities, Solution, Task
 from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError, WrongTypeError, from_dict
 import ast
 
@@ -35,23 +36,27 @@ class OrchestratorEngine:
             self._logger.error('Unable to parse plugin configuration to data class', e)
         return None
     
+    def __runTasks(self, step: str, capability: str, solution: Solution) -> None:
+        if(solution.status == 'Failed'):
+            return
+        for task in solution.tasks_byStep(step):
+            if(self._steps.get(step, capability)):
+                self._logger.info(f'     |->🚀 [{step}] Running task: {task.name}')
+                self._logger.debug(f'    |->🚀 [{step}] Running task: {task.id}')
+                taskResult = self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))
+                if(taskResult.status == 'Failed'):
+                    task.status = 'Failed'
+                    solution.status = 'Failed'
+                    break
+                else:    
+                    task.status = 'Finished'
+                     
     def __runSolution(self, capability: str, solution: Solution) -> None:
-        for task in solution.pre_tasks():
-            if(self._steps.get_pre(capability)):
-                self._logger.info(f'     |->🚀 [PRE] Running task: {task.name}')
-                self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))
-        for task in solution.run_tasks():
-            if(self._steps.get_run(capability)):
-                self._logger.info(f'     |->🚀 [RUN] Running task: {task.name}')
-                self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))
-        for task in solution.decom_tasks():
-            if(self._steps.get_decom(capability)):
-                self._logger.info(f'     |->🚀 [DECOM] Running task: {task.name}')
-                self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))        
-        for task in solution.post_tasks():
-            if(self._steps.get_post(capability)):
-                self._logger.info(f'     |->🚀 [POST] Running task: {task.name}')
-                self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))     
+        solution.status = 'Running'
+        self.__runTasks('pre', capability, solution)
+        self.__runTasks('run', capability, solution)
+        self.__runTasks('decom', capability, solution)
+        self.__runTasks('post', capability, solution)  
      
     def __runCapability(self, current: str, capability: Optional[List[Solution]]) -> None:
         self._logger.info(f'🦾 Running capability: {current}')
@@ -84,14 +89,20 @@ class OrchestratorEngine:
         """
         self.plugins.discover_plugins(True)
 
-    def __invoke_on_plugin(self, moduleName: str, parameters: dict = None, variables: dict = None):
+    def __invoke_on_plugin(self, moduleName: str, parameters: dict = None, variables: dict = None) -> TaskResult:
         plugin = self.plugins.register_plugin_by_alias(moduleName)
         if(plugin is None):
             self._logger.error(f'       Failed to load plugin: {moduleName} - Skip task')
             return
-        delegate = self.plugins.hook_plugin(plugin)
+        delegate = self.plugins.hook_invoke(plugin)
         task = delegate(parameters=parameters, variables=variables)
         if(task.status == 'Failed'):
             self._logger.error(f'       Failed task: {task.name} with errors: {task.errors}')
         else:
+            variables = self.plugins.getVariables(plugin)
+            if(not variables is None):
+                self._logger.debug(f"Append {len(variables)} variables")
+                self._bagOfVariables.append(variables)
+                self._logger.debug(f"Now, there are {len(self._bagOfVariables._variables)} variables provided by this task")
             self._logger.log(70, f'     Finished task: {task.name}')
+        return task

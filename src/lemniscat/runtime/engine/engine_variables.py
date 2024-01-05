@@ -1,6 +1,7 @@
 from logging import Logger
 import json
 import ast
+import logging
 import re
 
 class BagOfVariables:
@@ -42,11 +43,21 @@ class BagOfVariables:
             if(not m is None):
                 if(m.group('capability') == capability):
                     result[m.group('variable')] = self._variables[key]
+        result.update(self._variables)
         
+        if(self._logger.level == logging.DEBUG):
+            self._logger.debug(f"-----------------------------------------------")
+            self._logger.debug(f"Variables for task in capability '{capability}':")
+            for key in result.keys():
+                self._logger.debug(f"{key}: {result[key]}")
+            self._logger.debug(f"-----------------------------------------------")
         return result
 
     def set(self, key: str, value: str) -> None:
         self._variables[key] = value
+        
+    def append(self, variables: dict) -> None:
+        self._variables.update(variables)
 
     def __str__(self) -> str:
         return f'{self._variables}'

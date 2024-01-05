@@ -76,8 +76,15 @@ class PluginManager:
         return module(logger)
 
     @staticmethod
-    def hook_plugin(plugin: PluginCore):
+    def hook_invoke(plugin: PluginCore):
         """
         Return a function accepting commands.
         """
         return plugin.invoke
+    
+    @staticmethod
+    def getVariables(plugin: PluginCore) -> dict:
+        """
+        Return a function accepting commands.
+        """
+        return plugin.getVariables()

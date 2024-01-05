@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Optional
+import uuid
 
 
 @dataclass
@@ -38,6 +39,8 @@ class PluginConfig:
 
 @dataclass
 class Task:
+    id: str
+    status: str
     name: str
     displayName: str
     steps: List[str]
@@ -48,28 +51,37 @@ class Task:
         self.displayName = kwargs['displayName']
         self.steps = kwargs['steps']
         self.parameters = kwargs['parameters']
+        self.id = str(uuid.uuid4())
+        self.status = 'Pending'
 
 @dataclass
 class Solution:
+    id: str
+    status: str
     name: str
     description: str
     tasks: Optional[List[Task]]
     
+    def tasks_byStep(self, step: str) -> List[Task]:
+        return [task for task in self.tasks if step in task.steps and task.status == 'Pending']
+    
     def pre_tasks(self) -> List[Task]:
-        return [task for task in self.tasks if 'pre' in task.steps]
+        return [task for task in self.tasks if 'pre' in task.steps and task.status == 'Pending']
     
     def run_tasks(self) -> List[Task]:
-        return [task for task in self.tasks if 'run' in task.steps]
+        return [task for task in self.tasks if 'run' in task.steps and task.status == 'Pending']
 
     def decom_tasks(self) -> List[Task]:
-        return [task for task in self.tasks if 'decom' in task.steps]
+        return [task for task in self.tasks if 'decom' in task.steps and task.status == 'Pending']
     
     def post_tasks(self) -> List[Task]:
-        return [task for task in self.tasks if 'post' in task.steps]
+        return [task for task in self.tasks if 'post' in task.steps and task.status == 'Pending']
     
     def __init__(self, **kwargs) -> None:
         self.name = kwargs['solution']
         self.tasks = list(map(lambda x: Task(**x), kwargs['tasks']))
+        self.id = str(uuid.uuid4())
+        self.status = 'Pending'
 
 
 @dataclass
