@@ -1,0 +1,11 @@
+{
+    "name": "CloudBooster",
+    "code": "cb",
+    "monitor.enable": true,
+    "monitor.solution": "Datadog",
+    "code.enable": true,
+    "code.solution": "GitHub",
+    "operate.enable": true,
+    "operate.solution": "Azure",
+    "operate.tfBackend": "azurerm"
+}
