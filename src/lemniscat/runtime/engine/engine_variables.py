@@ -3,6 +3,12 @@ import json
 import ast
 import logging
 import re
+from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError, WrongTypeError, from_dict
+from lemniscat.core.util.helpers import FileSystem
+
+from lemniscat.runtime.model.models import Variable
+
+_REGEX_CAPTURE_VARIABLE = r"(?:\${{(?P<var>[^}]+)}})"
 
 class BagOfVariables:
     """A bag of variables that can be used to store and retrieve variables"""
@@ -22,13 +28,29 @@ class BagOfVariables:
                 self._variables[key] = variables[key]
             self._logger.debug(f"{len(variables)} loaded.")    
         
+        self._logger.debug(f"Loading variables from manifest...")
+        self.__append_manifestVariables(self, args[0]['manifest'])
+        self._logger.debug(f"{len(variables)} loaded.")
+        
         self._logger.debug(f"Override variables from parameters...")
         override = json.loads(args[0]['override_variables'])        
         if(override != None):
             for key in override:
-                self._variables[key] = args[0]['override_variables'][key]
+                self._variables[key] = override[key]
             self._logger.debug(f"{len(override)} loaded.")
+        self.interpret(); 
         self._logger.info("Variables loaded")
+        
+    def __append_manifestVariables(self, manifest_path) -> None:
+        try:
+            manifest_data = FileSystem.load_configuration_path(manifest_path)
+            for var in manifest_data['variables']:
+                variable = from_dict(data_class=Variable, data=var).to_dict()
+                self._variables.update(variable)
+        except FileNotFoundError as e:
+            self._logger.error('Unable to read configuration file', e)
+        except (NameError, ForwardReferenceError, UnexpectedDataError, WrongTypeError, MissingValueError) as e:
+            self._logger.error('Unable to parse plugin configuration to data class', e)
 
     def get(self, key: str) -> str:
         if(not key in self._variables):
@@ -58,6 +80,23 @@ class BagOfVariables:
         
     def append(self, variables: dict) -> None:
         self._variables.update(variables)
+    
+    def __interpret(self, value: str) -> str:
+        if(value is None):
+            return None
+        if(isinstance(value, str)):
+            matches = re.findall(_REGEX_CAPTURE_VARIABLE, value)
+            if(len(matches) > 0):
+                for match in matches:
+                    var = str.strip(match)
+                    if(var in self._variables):
+                        value = value.replace(f'${{{{{match}}}}}', self._variables[var])
+                        self._logger.debug(f"Interpreting variable: {var} -> {self._variables[var]}")
+        return value    
+        
+    def interpret(self) -> None:
+        for key in self._variables:
+            self._variables[key] = self.__interpret(self._variables[key])
 
     def __str__(self) -> str:
         return f'{self._variables}'

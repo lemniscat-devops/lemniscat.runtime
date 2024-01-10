@@ -23,11 +23,13 @@
                 "-m",
                 "${workspaceFolder}/sample/manifest.yml",
                 "-s",
-                "['pre:all', 'run:all', 'post:all']",
+                "['pre:all']",
                 "-c",
                 "['${workspaceFolder}/sample/configDomain.json', '${workspaceFolder}/sample/configEnv.json']",
                 "-l",
-                "INFO"
+                "DEBUG",
+                "-o",
+                "{ \"appName\": \"sample\", \"scopeType\": \"developer\", \"developerEmail\": \"p.morisseau@groupeonepoint.com\", \"instanceCode\": \"1\" }"
             ]
         }
     ]

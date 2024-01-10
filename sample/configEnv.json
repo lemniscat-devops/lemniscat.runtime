@@ -1,7 +1,9 @@
 {
-    "name": "Development",
-    "env1": "d",
-    "env3": "dev",
+    "env.name": "Development",
+    "env.env1": "d",
+    "env.env3": "dev",
+    "env.location": "westeurope",
+    "env.st_pepSubnetPrefix": "pep",
     "monitor.enable": false,
     "operate.tfBackend": "azurerm",
     "operate.arm_access_key": "08CMLob4mDzjqYY9lfGoAOOtoeUXdliKzAN9su1FpPndpsHAGIPIb+If6mOD4dFuStEuMowHvMDR+ASto3+ZqA==",

@@ -48,7 +48,8 @@ class OrchestratorEngine:
                     task.status = 'Failed'
                     solution.status = 'Failed'
                     break
-                else:    
+                else:
+                    self._bagOfVariables.interpret();    
                     task.status = 'Finished'
                      
     def __runSolution(self, capability: str, solution: Solution) -> None:
@@ -101,8 +102,8 @@ class OrchestratorEngine:
         else:
             variables = self.plugins.getVariables(plugin)
             if(not variables is None):
-                self._logger.debug(f"Append {len(variables)} variables")
+                self._logger.debug(f"Received {len(variables)} variables")
                 self._bagOfVariables.append(variables)
-                self._logger.debug(f"Now, there are {len(self._bagOfVariables._variables)} variables provided by this task")
+                self._logger.debug(f"Now, there are {len(self._bagOfVariables._variables)} variables in the bag")
             self._logger.log(70, f'     Finished task: {task.name}')
         return task

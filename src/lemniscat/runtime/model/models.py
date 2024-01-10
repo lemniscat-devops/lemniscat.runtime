@@ -10,6 +10,14 @@ class PluginRunTimeOption(object):
 
 
 @dataclass
+class Variable:
+    name: str
+    value: any
+
+    def to_dict(self) -> dict:
+        return { self.name: self.value }
+
+@dataclass
 class DependencyModule:
     name: str
     version: str

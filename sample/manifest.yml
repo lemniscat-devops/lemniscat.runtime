@@ -1,4 +1,40 @@
 ---
+variables:
+  - name: serviceLevel
+    value: integ
+  - name: resourceType
+    value: st
+  - name: serviceLevelShort
+    value: ig
+
+  - name: RGNAME
+    value: ${{ nc.rgName }}
+  - name: STNAME
+    value: ${{ nc.stName }}
+  - name: VNETNAME
+    value: ${{ nc.vnetName }}
+  - name: VNETRG
+    value: ${{ nc.vnetRg }}
+  - name: SUBNETNAME
+    value: ${{ nc.subnetName }}
+  - name: entityCode
+    value: ${{ domain.code }}
+  - name: location
+    value: ${{ env.location }}
+  - name: customName
+    value: ${{ appName }}
+  - name: rgTags.product_name
+    value: azure_storage_account
+  - name: rgTags.product_scope
+    value: ${{ scopeType }}
+  - name: rgTags.product_owner
+    value: ${{ principalName }}
+  - name: rgTags.rbac_scope
+    value: ${{ principalType }}
+  - name: rgTags.product_service_level
+    value: ${{ serviceLevel}}
+  - name: productInstanceName
+    value: ${{ STNAME }}  
 capabilities:
   code: null
   build: null
@@ -8,6 +44,56 @@ capabilities:
   operate:
     - solution: Azure
       tasks:
+        - task: powershell
+          displayName: 'Set scope name'
+          steps:
+            - pre
+          parameters:
+            type: inline
+            script: |
+              if("${{ scopeType }}" -eq "developer"){
+                $reg = "${{ developerEmail }}" | Select-String -Pattern "(?>(?<car1>\w)[^.@]*\.(?<car2>\w\w)\w*|(?<car3>\w)[^-@]*-(?<car4>\w\w)\w*)@.*"
+                $scopeName = "$($reg.Matches.Groups[1])$($reg.Matches.Groups[2])"
+                if(!$scopeName){ 
+                  $scopeName = "$($reg.Matches.Groups[3])$($reg.Matches.Groups[4])".tolower() 
+                }
+                Write-Host "[lemniscat.pushvar] scope=d-$scopeName"
+              }
+              if("${{ scopeType }}" -eq "team"){
+                $reg = "${{ teamName }}" | Select-String -Pattern "^SmartPlace-(?<scopeName>.{0,7}).*$"
+                $scopeName = "$($reg.Matches.Groups[1])$($reg.Matches.Groups[2])"
+                if(!$scopeName){ 
+                  $scopeName = "$($reg.Matches.Groups[3])$($reg.Matches.Groups[4])".tolower() 
+                }
+                Write-Host "[lemniscat.pushvar] scope=t-$scopeName"
+              }
+              if("${{ scopeType }}" -eq "program"){ 
+                Write-Host "[lemniscat.pushvar] scopeName=${{ domain.code }}"
+              }
+        - task: powershell
+          displayName: 'Set naming convention'
+          steps:
+            - pre
+          parameters:
+            type: inline
+            script: |
+              if("${{ appName }}" -ne $null){
+                $CN = "${{ appName }}".tolower() -replace "-", ""
+                Write-Host "Set additional variable : CN = $CN"
+                Write-Host "[lemniscat.pushvar] CN=$CN"
+              }
+
+              if("${{ serviceLevel }}" -ne $null){
+                $serviceLevelShort = "$("${{ serviceLevel }}".substring(0,1))$("${{ serviceLevel }}".substring("${{ serviceLevel }}".length-1,1))"
+                Write-Host "Set additional variable : serviceLevelShort = $serviceLevelShort"
+                Write-Host "[lemniscat.pushvar] serviceLevelShort=$serviceLevelShort" 
+              } 
+
+              if("${{ scope }}" -ne $null){
+                $scopeShort = "${{ scope }}" -replace "-", "" 
+                Write-Host "Set additional variable : scopeShort = $scopeShort"
+                Write-Host "[lemniscat.pushvar] scopeShort=$scopeShort" 
+              } 
         - task: terraform
           displayName: 'Terraform init'
           steps:
@@ -45,3 +131,7 @@ capabilities:
 requirements:
   - name: lemniscat.plugin.terraform
     version: 0.1.0.9
+  - name: lemniscat.plugin.powershell
+    version: 0.1.0.9
+  - name: lemniscat.plugin.filetransform
+    version: 0.1.0.1

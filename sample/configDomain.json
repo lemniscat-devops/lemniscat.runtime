@@ -1,11 +1,17 @@
 {
-    "name": "CloudBooster",
-    "code": "cb",
+    "domain.name": "CloudBooster",
+    "domain.code": "cb",
     "monitor.enable": true,
     "monitor.solution": "Datadog",
     "code.enable": true,
     "code.solution": "GitHub",
     "operate.enable": true,
     "operate.solution": "Azure",
-    "operate.tfBackend": "azurerm"
+    "operate.tfBackend": "azurerm",
+    "nc.projectName": "${{appName}}-${{serviceLevel}}",
+    "nc.rgName": "rg-${{ env.env3 }}-${{scope}}-${{ domain.code }}-${{nc.projectName}}",
+    "nc.stName": "st${{env.env1}}${{domain.code}}${{CN}}${{serviceLevelShort}}${{instanceCode}}",
+    "nc.vNetName": "vnet-${{ env.env3 }}-${{ domain.code }}-${{ env.location }}",
+    "nc.vNetRg": "rg-net-${{ env.env3 }}-${{ domain.code }}",
+    "nc.subnetName": "snet-${{ domain.pepSubnetPrefix }}-${{ env.env3 }}-${{ domain.code }}-${{ serviceLevel}}"
 }
