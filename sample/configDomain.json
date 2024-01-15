@@ -13,5 +13,5 @@
     "nc.stName": "st${{env.env1}}${{domain.code}}${{CN}}${{serviceLevelShort}}${{instanceCode}}",
     "nc.vNetName": "vnet-${{ env.env3 }}-${{ domain.code }}-${{ env.location }}",
     "nc.vNetRg": "rg-net-${{ env.env3 }}-${{ domain.code }}",
-    "nc.subnetName": "snet-${{ domain.pepSubnetPrefix }}-${{ env.env3 }}-${{ domain.code }}-${{ serviceLevel}}"
+    "nc.subnetName": "snet-${{ pepSubnetPrefix }}-${{ env.env3 }}-${{ domain.code }}-${{ serviceLevel}}"
 }

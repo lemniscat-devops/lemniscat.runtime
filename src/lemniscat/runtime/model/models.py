@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import List, Optional
+from lemniscat.core.util.helpers import LogUtil, FileSystem
 import uuid
 
 
@@ -12,7 +13,7 @@ class PluginRunTimeOption(object):
 @dataclass
 class Variable:
     name: str
-    value: any
+    value: object
 
     def to_dict(self) -> dict:
         return { self.name: self.value }
@@ -45,6 +46,7 @@ class PluginConfig:
     parameters: Optional[List[Parameters]]
     requirements: Optional[List[DependencyModule]]
 
+
 @dataclass
 class Task:
     id: str
@@ -61,6 +63,20 @@ class Task:
         self.parameters = kwargs['parameters']
         self.id = str(uuid.uuid4())
         self.status = 'Pending'
+
+@dataclass
+class Template:
+    path: str
+    
+    def __init__(self, **kwargs) -> None:
+        self.path = kwargs['template']
+    
+    def getTasks(self) -> List[Task]:
+        tasks = FileSystem.load_configuration_path(self.path)
+        result = []
+        for task in tasks['tasks']:
+            result.append(Task(**task))           
+        return result
 
 @dataclass
 class Solution:
@@ -87,7 +103,12 @@ class Solution:
     
     def __init__(self, **kwargs) -> None:
         self.name = kwargs['solution']
-        self.tasks = list(map(lambda x: Task(**x), kwargs['tasks']))
+        self.tasks = []
+        for task in kwargs['tasks']:
+            if(dict(task).keys().__contains__('template')):
+                self.tasks.extend(Template(**task).getTasks())
+            else:
+                self.tasks.append(Task(**task))    
         self.id = str(uuid.uuid4())
         self.status = 'Pending'
 

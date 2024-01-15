@@ -29,7 +29,7 @@ class BagOfVariables:
             self._logger.debug(f"{len(variables)} loaded.")    
         
         self._logger.debug(f"Loading variables from manifest...")
-        self.__append_manifestVariables(self, args[0]['manifest'])
+        self.__append_manifestVariables(args[0]['manifest'])
         self._logger.debug(f"{len(variables)} loaded.")
         
         self._logger.debug(f"Override variables from parameters...")

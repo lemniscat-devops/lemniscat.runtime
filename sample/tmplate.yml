@@ -1,0 +1,54 @@
+tasks:
+- task: powershell
+  displayName: 'Set scope name'
+  steps:
+    - pre
+  parameters:
+    type: inline
+    script: |
+      if("${{ scopeType }}" -eq "developer"){
+        $reg = "${{ developerEmail }}" | Select-String -Pattern "(?>(?<car1>\w)[^.@]*\.(?<car2>\w\w)\w*|(?<car3>\w)[^-@]*-(?<car4>\w\w)\w*)@.*"
+        $scopeName = "$($reg.Matches.Groups[1])$($reg.Matches.Groups[2])"
+        if(!$scopeName){ 
+          $scopeName = "$($reg.Matches.Groups[3])$($reg.Matches.Groups[4])".tolower() 
+        }
+        Write-Host "[lemniscat.pushvar] scope=d-$scopeName"
+      }
+      if("${{ scopeType }}" -eq "team"){
+        $reg = "${{ teamName }}" | Select-String -Pattern "^SmartPlace-(?<scopeName>.{0,7}).*$"
+        $scopeName = "$($reg.Matches.Groups[1])$($reg.Matches.Groups[2])"
+        if(!$scopeName){ 
+          $scopeName = "$($reg.Matches.Groups[3])$($reg.Matches.Groups[4])".tolower() 
+        }
+        Write-Host "[lemniscat.pushvar] scope=t-$scopeName"
+      }
+      if("${{ scopeType }}" -eq "program"){ 
+        Write-Host "[lemniscat.pushvar] scopeName=${{ domain.code }}"
+      }
+- task: powershell
+  displayName: 'Set naming convention'
+  steps:
+    - pre
+  parameters:
+    type: inline
+    script: |
+      if("${{ appName }}" -ne ""){
+        $tmp = "${{ appName }}"
+        Write-Host "appName = $tmp"
+        $CN = $tmp.tolower() -replace "-", ""
+        Write-Host "Set additional variable : CN = $CN"
+        Write-Host "[lemniscat.pushvar] CN=$CN"
+      }
+
+      if("${{ serviceLevel }}" -ne ""){
+        $servicelevel = "${{ serviceLevel }}"
+        $serviceLevelShort = "$($servicelevel.substring(0,1))$($servicelevel.substring($servicelevel.length-1,1))"
+        Write-Host "Set additional variable : serviceLevelShort = $serviceLevelShort"
+        Write-Host "[lemniscat.pushvar] serviceLevelShort=$serviceLevelShort" 
+      } 
+
+      if("${{ scope }}" -ne ""){
+        $scopeShort = "${{ scope }}" -replace "-", "" 
+        Write-Host "Set additional variable : scopeShort = $scopeShort"
+        Write-Host "[lemniscat.pushvar] scopeShort=$scopeShort" 
+      } 
