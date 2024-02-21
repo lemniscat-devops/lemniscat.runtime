@@ -85,10 +85,12 @@ class BagOfVariables:
         for key in variable:
             if(isinstance(variable[key], str)):
                 tmp = self.__intepretString(variable[key])
-            if(isinstance(variable[key], dict)):
+            elif(isinstance(variable[key], dict)):
                 tmp = self.__interpretDict(variable[key])
-            if(isinstance(variable[key], list)):
+            elif(isinstance(variable[key], list)):
                 tmp = self.__interpretList(variable[key])
+            else:
+                tmp = variable[key]
             if(tmp.sensitive):
                 isSensitive = True
             variable[key] = tmp.value
@@ -99,10 +101,12 @@ class BagOfVariables:
         for val in variable:
             if(isinstance(val, str)):
                 tmp = self.__intepretString(val)
-            if(isinstance(val, dict)):
+            elif(isinstance(val, dict)):
                 tmp = self.__interpretDict(val)
-            if(isinstance(val, list)):
+            elif(isinstance(val, list)):
                 tmp = self.__interpretList(val)
+            else:
+                tmp = val
             if(tmp.sensitive):
                 isSensitive = True
             val = tmp.value
@@ -127,9 +131,9 @@ class BagOfVariables:
             return None
         if(isinstance(variable.value, str)):
             tmp = self.__intepretString(variable.value)
-        if(isinstance(variable.value, dict)):
+        elif(isinstance(variable.value, dict)):
             tmp = self.__interpretDict(variable.value)
-        if(isinstance(variable.value, list)):
+        elif(isinstance(variable.value, list)):
             tmp = self.__interpretList(variable.value)
         else:
             tmp = variable
