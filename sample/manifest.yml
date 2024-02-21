@@ -20,22 +20,30 @@ variables:
     value: ${{ domain.code }}
   - name: location
     value: ${{ env.location }}
+  - name: env1
+    value: ${{ env.env1 }}
+  - name: env3
+    value: ${{ env.env3 }} 
   - name: customName
     value: ${{ appName }}
+  - name: projectName
+    value: ${{ nc.projectName }}
   - name: rgTags.product_name
     value: azure_storage_account
   - name: rgTags.product_scope
     value: ${{ scopeType }}
   - name: rgTags.product_owner
-    value: ${{ principalName }}
+    value: ${{ ownerPrincipalName }}
   - name: rgTags.rbac_scope
-    value: ${{ principalType }}
+    value: ${{ ownerPrincipalType }}
   - name: rgTags.product_service_level
-    value: ${{ serviceLevel}}
+    value: ${{ serviceLevel }}
   - name: productInstanceName
     value: ${{ STNAME }}
   - name: pepSubnetPrefix
     value: ${{ env.st_pepSubnetPrefix }}  
+  - name: workspaceScope
+    value: '/subscriptions/${{ env.subscriptionId }}/resourceGroups/${{ nc.rgName }}'
 capabilities:
   code: null
   build: null
@@ -45,39 +53,13 @@ capabilities:
   operate:
     - solution: Azure
       tasks:
-        - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\tmplate.yml
-        - task: filetransform
-          displayName: 'Set tfvars'
-          steps:
-            - pre
-          parameters:
-            folderPath: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample
-            fileType: json
-            targetFiles: "*.tfvars.json"
-        - task: terraform
-          displayName: 'Terraform init'
-          steps:
-            - pre
-            - run
-            - decom
-          parameters:
-            action: init
-            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
-        - task: terraform
-          displayName: 'Terraform plan'
-          steps:
-            - pre
-          parameters:
-            action: plan
-            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
-            tfVarFile: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\variables.tfvars.json
-        - task: terraform
-          displayName: 'Terraform apply'
-          steps:
-            - run
-          parameters:
-            action: apply
-            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+        - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\set-parameters-file.yml
+          displayName: 'Set parameters file'
+        - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\set-workspace.yml
+          displayName: 'Set workspace'
+        - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\deploy-infra.yml
+          displayName: 'Deploy infra'
+
         - task: terraform
           displayName: 'Terraform destroy'
           steps:
@@ -90,8 +72,10 @@ capabilities:
   plan: null
 requirements:
   - name: lemniscat.plugin.terraform
-    version: 0.1.0.9
+    version: 0.1.0.20
   - name: lemniscat.plugin.powershell
-    version: 0.1.0.9
+    version: 0.1.0.13
   - name: lemniscat.plugin.filetransform
-    version: 0.1.0.1
+    version: 0.1.0.3
+  - name: lemniscat.plugin.azurecli
+    version: 0.1.0.7

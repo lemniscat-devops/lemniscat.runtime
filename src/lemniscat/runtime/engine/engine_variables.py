@@ -5,8 +5,7 @@ import logging
 import re
 from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError, WrongTypeError, from_dict
 from lemniscat.core.util.helpers import FileSystem
-
-from lemniscat.runtime.model.models import Variable
+from lemniscat.runtime.model.models import VariableValue, Variable
 
 _REGEX_CAPTURE_VARIABLE = r"(?:\${{(?P<var>[^}]+)}})"
 
@@ -25,7 +24,7 @@ class BagOfVariables:
             with open(file, 'r') as f:
                 variables = json.load(f)
             for key in variables:
-                self._variables[key] = variables[key]
+                self._variables[key] = VariableValue(variables[key])
             self._logger.debug(f"{len(variables)} loaded.")    
         
         self._logger.debug(f"Loading variables from manifest...")
@@ -36,7 +35,7 @@ class BagOfVariables:
         override = json.loads(args[0]['override_variables'])        
         if(override != None):
             for key in override:
-                self._variables[key] = override[key]
+                self._variables[key] = VariableValue(override[key])
             self._logger.debug(f"{len(override)} loaded.")
         self.interpret(); 
         self._logger.info("Variables loaded")
@@ -75,24 +74,69 @@ class BagOfVariables:
             self._logger.debug(f"-----------------------------------------------")
         return result
 
-    def set(self, key: str, value: str) -> None:
-        self._variables[key] = value
+    def set(self, key: str, value: str, sensitive: bool = False) -> None:
+        self._variables[key] = VariableValue(value, sensitive)
         
     def append(self, variables: dict) -> None:
         self._variables.update(variables)
+
+    def __interpretDict(self, variable: dict) -> VariableValue:
+        isSensitive = False
+        for key in variable:
+            if(isinstance(variable[key], str)):
+                tmp = self.__intepretString(variable[key])
+            if(isinstance(variable[key], dict)):
+                tmp = self.__interpretDict(variable[key])
+            if(isinstance(variable[key], list)):
+                tmp = self.__interpretList(variable[key])
+            if(tmp.sensitive):
+                isSensitive = True
+            variable[key] = tmp.value
+        return VariableValue(variable, isSensitive)
     
-    def __interpret(self, value: str) -> str:
-        if(value is None):
+    def __interpretList(self, variable: list) -> VariableValue:
+        isSensitive = False
+        for val in variable:
+            if(isinstance(val, str)):
+                tmp = self.__intepretString(val)
+            if(isinstance(val, dict)):
+                tmp = self.__interpretDict(val)
+            if(isinstance(val, list)):
+                tmp = self.__interpretList(val)
+            if(tmp.sensitive):
+                isSensitive = True
+            val = tmp.value
+        return VariableValue(variable, isSensitive)    
+    
+    def __intepretString(self, value: str) -> VariableValue:
+        isSensitive = False
+        matches = re.findall(_REGEX_CAPTURE_VARIABLE, value)
+        if(len(matches) > 0):
+            for match in matches:
+                var = str.strip(match)
+                if(var in self._variables):
+                    if(self._variables[var].sensitive):
+                        isSensitive = True
+                    value = value.replace(f'${{{{{match}}}}}', self._variables[var].value)
+                    self._logger.debug(f"Interpreting variable: {var} -> {self._variables[var]}")
+        return VariableValue(value, isSensitive)        
+                        
+    def __interpret(self, variable: VariableValue) -> VariableValue:
+        isSensitive = variable.sensitive
+        if(variable is None):
             return None
-        if(isinstance(value, str)):
-            matches = re.findall(_REGEX_CAPTURE_VARIABLE, value)
-            if(len(matches) > 0):
-                for match in matches:
-                    var = str.strip(match)
-                    if(var in self._variables):
-                        value = value.replace(f'${{{{{match}}}}}', self._variables[var])
-                        self._logger.debug(f"Interpreting variable: {var} -> {self._variables[var]}")
-        return value    
+        if(isinstance(variable.value, str)):
+            tmp = self.__intepretString(variable.value)
+        if(isinstance(variable.value, dict)):
+            tmp = self.__interpretDict(variable.value)
+        if(isinstance(variable.value, list)):
+            tmp = self.__interpretList(variable.value)
+        else:
+            tmp = variable
+        if(tmp.sensitive):
+            isSensitive = True
+        variable.value = tmp.value
+        return VariableValue(variable.value, isSensitive)    
         
     def interpret(self) -> None:
         for key in self._variables:

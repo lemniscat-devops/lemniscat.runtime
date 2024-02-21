@@ -13,7 +13,7 @@
             "subProcess": true,
             "env": {
                 "PYTHONPATH": "${workspaceFolder}/src",
-                "LEM_DEBUG": "1",
+                "LEM_DEBUG": "0",
                 "ARM_SUBSCRIPTION_ID": "ad0ffbcf-ca63-4c29-92ea-5c06c5f8bb4c",
                 "ARM_TENANT_ID": "f7163adf-2d46-4910-9e46-c0d738e7ff4d",
                 "ARM_CLIENT_ID": "b184e53a-7aac-470b-9e22-8509a994691a",
@@ -23,13 +23,13 @@
                 "-m",
                 "${workspaceFolder}/sample/manifest.yml",
                 "-s",
-                "['pre:all']",
+                "['pre:all', 'run:all']",
                 "-c",
                 "['${workspaceFolder}/sample/configDomain.json', '${workspaceFolder}/sample/configEnv.json']",
                 "-l",
                 "DEBUG",
                 "-o",
-                "{ \"appName\": \"sample\", \"scopeType\": \"developer\", \"developerEmail\": \"p.morisseau@groupeonepoint.com\", \"instanceCode\": \"1\" }"
+                "{ \"appName\": \"sample3\", \"scopeType\": \"developer\", \"developerEmail\": \"p.morisseau@groupeonepoint.com\", \"instanceCode\": \"1\", \"enableNetworkIsolation\": \"false\" }",
             ]
         }
     ]

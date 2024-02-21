@@ -9,6 +9,9 @@ from lemniscat.core.model import TaskResult
 from lemniscat.runtime.model.models import Capabilities, Solution, Task
 from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError, WrongTypeError, from_dict
 import ast
+import re
+
+_REGEX_CAPTURE_VARIABLE = r"(?:\${{(?P<var>[^}]+)}})"
 
 class OrchestratorEngine:
     """The orchestrator engine is the main entry point for the application"""
@@ -17,6 +20,8 @@ class OrchestratorEngine:
     _capabilities: Capabilities
     _steps: StepsParser
     plugins: PluginManager
+    
+
 
     def __init__(self, **args) -> None:
         self._logger = LogUtil.create(args['options']['log_level'])
@@ -36,21 +41,42 @@ class OrchestratorEngine:
             self._logger.error('Unable to parse plugin configuration to data class', e)
         return None
     
+    def __interpretTaskCondition(self, capability: str, condition: str) -> bool:
+        if(condition is None):
+            return True
+        if(isinstance(condition, str)):
+            variables = self._bagOfVariables.get_all_for_capability(capability)
+            matches = re.findall(_REGEX_CAPTURE_VARIABLE, condition)
+            if(len(matches) > 0):
+                for match in matches:
+                    var = str.strip(match)
+                    if(var in variables):
+                        condition = condition.replace(f'${{{{{match}}}}}', variables[var].value)
+                        self._logger.debug(f"Interpreting variable: {var} -> {variables[var]}")
+                    else:
+                        condition = condition.replace(f'${{{{{match}}}}}', "")
+                        self._logger.debug(f"Variable not found: {var}. Replaced by empty string.")
+        return eval(condition)
+    
     def __runTasks(self, step: str, capability: str, solution: Solution) -> None:
         if(solution.status == 'Failed'):
             return
         for task in solution.tasks_byStep(step):
             if(self._steps.get(step, capability)):
-                self._logger.info(f'     |->🚀 [{step}] Running task: {task.name}')
-                self._logger.debug(f'    |->🚀 [{step}] Running task: {task.id}')
-                taskResult = self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))
-                if(taskResult.status == 'Failed'):
-                    task.status = 'Failed'
-                    solution.status = 'Failed'
-                    break
+                if(task.condition is None or self.__interpretTaskCondition(capability, task.condition) == True):
+                    self._logger.info(f'     |->🚀 [{step}] Running task: {task.displayName}')
+                    self._logger.debug(f'    |->🚀 [{step}] Running task: {task.id}')
+                    taskResult = self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))
+                    if(taskResult.status == 'Failed'):
+                        task.status = 'Failed'
+                        solution.status = 'Failed'
+                        break
+                    else:
+                        self._bagOfVariables.interpret();    
+                        task.status = 'Finished'
                 else:
-                    self._bagOfVariables.interpret();    
-                    task.status = 'Finished'
+                    self._logger.info(f'    |->🚀 [{step}] Skipping task: {task.name}')
+                    self._logger.debug(f'    |->🚀 [{step}] Running task: {task.id}')
                      
     def __runSolution(self, capability: str, solution: Solution) -> None:
         solution.status = 'Running'
@@ -62,9 +88,10 @@ class OrchestratorEngine:
     def __runCapability(self, current: str, capability: Optional[List[Solution]]) -> None:
         self._logger.info(f'🦾 Running capability: {current}')
         if(not capability is None): 
-            if(self._bagOfVariables.get(f"{current}.enable") == True):
+            isEnable = self._bagOfVariables.get(f"{current}.enable")
+            if(isEnable.value == True):
                 for solution in capability:
-                    if(self._bagOfVariables.get(f"{current}.solution") == solution.name):
+                    if(self._bagOfVariables.get(f"{current}.solution").value == solution.name):
                         self._logger.info(f' |->💡 Running solution: {solution.name}')
                         self.__runSolution(current, solution)
                     else:

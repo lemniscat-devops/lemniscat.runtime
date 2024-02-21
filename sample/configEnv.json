@@ -1,13 +1,14 @@
 {
-    "env.name": "Development",
-    "env.env1": "d",
-    "env.env3": "dev",
+    "env.name": "Development3",
+    "env.env1": "3",
+    "env.env3": "de3",
     "env.location": "westeurope",
     "env.st_pepSubnetPrefix": "pep",
+    "env.subscriptionId": "ad0ffbcf-ca63-4c29-92ea-5c06c5f8bb4c",
     "monitor.enable": false,
-    "operate.tfBackend": "azurerm",
-    "operate.arm_access_key": "08CMLob4mDzjqYY9lfGoAOOtoeUXdliKzAN9su1FpPndpsHAGIPIb+If6mOD4dFuStEuMowHvMDR+ASto3+ZqA==",
-    "operate.storage_account_name": "stcfsoplab",
-    "operate.container_name": "tfstates",
-    "operate.key": "loremipsum.tfstate"
+    "operate.tf.backend_type": "azurerm",
+    "operate.tf.storage_account_name": "stcf3op",
+    "operate.tf.container_name": "tfstates",
+    "operate.tf.key": "${{ nc.rgName }}.azureworkspace.tfstate",
+    "product.owner.default.role": "Contributor"
 }

@@ -1,0 +1,62 @@
+tasks:
+- task: azurecli
+  displayName: 'Check if workspace exist'
+  steps:
+    - pre
+  parameters:
+    scripttype: pwsh
+    commandtype: inline
+    script: | 
+      $rg_name = "${{ nc.rgName }}"
+      $workspaceExist = az group exists -n $rg_name 
+      if($workspaceExist -eq "false") 
+      { 
+          Write-Host "The resource group named $rg_name not exist." 
+      } 
+      else{ 
+          Write-Host "The resource group named $rg_name exist, skipping creation!" 
+      } 
+      Write-Host "[lemniscat.pushvar] workspaceExist=$workspaceExist"
+
+- task: terraform
+  condition: '"${{ workspaceExist }}" == "false"'
+  displayName: 'Terraform init'
+  steps:
+    - pre
+  parameters:
+    action: init
+    tfPath: C:\DEV\Onepoint\Smartplace\Infra.Templates\terraform\workspace
+    backend:
+      key: "${{ nc.rgName }}.azureworkspace.tfstate"
+- task: terraform
+  condition: '"${{ workspaceExist }}" == "false"'
+  displayName: 'Terraform plan workspace'
+  steps:
+    - pre
+  parameters:
+    action: plan
+    tfPath: C:\DEV\Onepoint\Smartplace\Infra.Templates\terraform\workspace
+    tfVarFile: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\variables.tfvars.json
+- task: terraform
+  condition: '"${{ workspaceExist }}" == "false"'
+  displayName: 'Terraform apply workspace'
+  steps:
+    - pre
+  parameters:
+    action: apply
+    tfPath: C:\DEV\Onepoint\Smartplace\Infra.Templates\terraform\workspace
+    prefixOutput: workspace
+- task: azurecli
+  condition: '"${{ workspaceExist }}" == "false"'
+  displayName: 'Set azure rbac'
+  steps:
+    - pre
+  parameters:
+    scripttype: pwsh
+    commandtype: file
+    filePath: C:\DEV\Onepoint\Smartplace\Pipelines.Templates\steps\azure\rbac_azure.ps1
+    fileParams:
+     assignmentScope: ${{ workspaceScope }}
+     principalName: ${{ ownerPrincipalName }}
+     principalType: ${{ ownerPrincipalType }}
+     roleDefinitionName: Reader

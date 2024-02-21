@@ -1,5 +1,7 @@
+import ast
 from dataclasses import dataclass
 from typing import List, Optional
+from lemniscat.core.model.models import VariableValue
 from lemniscat.core.util.helpers import LogUtil, FileSystem
 import uuid
 
@@ -9,14 +11,14 @@ class PluginRunTimeOption(object):
     main: str
     tests: Optional[List[str]]
 
-
 @dataclass
 class Variable:
     name: str
     value: object
+    sensitive: bool = False
 
     def to_dict(self) -> dict:
-        return { self.name: self.value }
+        return { self.name: VariableValue(self.value, self.sensitive) }
 
 @dataclass
 class DependencyModule:
@@ -52,6 +54,7 @@ class Task:
     id: str
     status: str
     name: str
+    condition: str
     displayName: str
     steps: List[str]
     parameters: dict
@@ -59,22 +62,36 @@ class Task:
     def __init__(self, **kwargs) -> None:
         self.name = kwargs['task']
         self.displayName = kwargs['displayName']
+        if(self.displayName is None):
+            self.displayName = self.name
+        if(kwargs.__contains__('prefix')):
+            val = kwargs['prefix']
+            self.displayName = f'{val}{self.displayName}'
         self.steps = kwargs['steps']
         self.parameters = kwargs['parameters']
+        if(kwargs.__contains__('condition')):
+            self.condition = kwargs['condition']
+        else:
+            self.condition = None
         self.id = str(uuid.uuid4())
         self.status = 'Pending'
 
 @dataclass
 class Template:
     path: str
+    displayName: str = None
     
     def __init__(self, **kwargs) -> None:
         self.path = kwargs['template']
+        if(kwargs.__contains__('displayName')):
+            val = kwargs['displayName']
+            self.displayName = f'[{val}] '
     
     def getTasks(self) -> List[Task]:
         tasks = FileSystem.load_configuration_path(self.path)
         result = []
         for task in tasks['tasks']:
+            task['prefix'] = self.displayName
             result.append(Task(**task))           
         return result
 
