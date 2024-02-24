@@ -47,16 +47,24 @@ tasks:
     tfPath: C:\DEV\Onepoint\Smartplace\Infra.Templates\terraform\workspace
     prefixOutput: workspace
 - task: azurecli
-  condition: '"${{ workspaceExist }}" == "false"'
   displayName: 'Set azure rbac'
   steps:
     - pre
   parameters:
     scripttype: pwsh
-    commandtype: file
-    filePath: C:\DEV\Onepoint\Smartplace\Pipelines.Templates\steps\azure\rbac_azure.ps1
-    fileParams:
-     assignmentScope: ${{ workspaceScope }}
-     principalName: ${{ ownerPrincipalName }}
-     principalType: ${{ ownerPrincipalType }}
-     roleDefinitionName: Reader
+    commandtype: inline
+    script: | 
+      $result = Get-Location
+      $variables = Get-Content "$($result.path)/vars.json" | ConvertFrom-Json -Depth 100
+      foreach ($rbac in $variables.'workspace.rbac') {
+          $assignmentScope = $rbac.scope
+          $principalName = $rbac.principalName
+          $principalType = $rbac.principalType
+          $roleDefinitionName = $rbac.role
+          
+          & "C:\DEV\Onepoint\Smartplace\Pipelines.Templates\steps\azure\rbac_azure.ps1" -assignmentScope "$assignmentScope" -principalName "$principalName" -principalType "$principalType" -roleDefinitionName "$roleDefinitionName"
+      }
+      Write-Host "Rbac apply with success!"
+    storeVariablesInFile:
+      format: json
+      withSecrets: false

@@ -26,9 +26,15 @@
             "principalType": "${{ ownerPrincipalType }}",
             "role": "${{ workspace.owner.default.role }}",
             "scope": "/subscriptions/${{ env.subscriptionId }}/resourceGroups/${{ nc.rgName }}"
+        },
+        {
+            "principalName": "${{ ownerPrincipalName }}",
+            "principalType": "${{ ownerPrincipalType }}",
+            "role": "Contributor",
+            "scope": "/subscriptions/${{ env.subscriptionId }}/resourceGroups/${{ nc.rgName }}"
         }
     ],
-    "product.rbac": [
+    "storageaccount.product.rbac": [
         {
             "principalName": "${{ ownerPrincipalName }}",
             "principalType": "${{ ownerPrincipalType }}",

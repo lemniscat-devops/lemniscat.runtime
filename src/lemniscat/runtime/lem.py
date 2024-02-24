@@ -1,6 +1,6 @@
 import argparse
 import os
-from version import __version__
+from version import __version__, __release_date__
 
 ## Debugging
 if os.environ.get('LEM_DEBUG') == '1':
@@ -45,6 +45,11 @@ def __init_cli() -> argparse:
         '-o', '--overrideVariables', default='{}', help="""
         (Optional) Supply a dictionary of variables which should be overridden. The default is {}
         """
+    )
+    parser.add_argument(
+        '-x', '--outpoutContext', default=None, help="""
+        (Optional) Supply a path to the output context. The default is None
+        """
     )                  
     return parser
 
@@ -65,7 +70,7 @@ def __init_app(parameters: dict) -> None:
     print("▒█░░░ █▀▀ █░▀░█ █░░█ ▀█▀ ░ ▀▀█░|\__/,|░░░(`\░░▒█░░░ █▄▄█ ░░█░░")
     print("▒█▄▄█ ▀▀▀ ▀░░░▀ ▀░░▀ ▀▀▀ ░ ▀▀_.|o o  |_░░░) )░▒█▄▄█ ▀░░▀ ░░▀░░")
     print("----------------------------(((---(((-------------------------")
-    print(f"----------------- version {__version__} - 2023-12-31 -----------------")
+    print(f"----------------- version {__version__} - {__release_date__} -----------------")
     print("--------------------------------------------------------------")
     print("")
     OrchestratorEngine(options=parameters).start()
@@ -78,7 +83,8 @@ def lem() -> None:
         'log_level': __cli_args.log,
         'steps': __cli_args.steps,
         'config_files': __cli_args.configFiles,
-        'override_variables': __cli_args.overrideVariables
+        'override_variables': __cli_args.overrideVariables,
+        'output_context': __cli_args.outpoutContext
     })
 
 if __name__ == '__main__':

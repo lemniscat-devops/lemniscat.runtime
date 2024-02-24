@@ -21,15 +21,17 @@
             },
             "args": [
                 "-m",
-                "${workspaceFolder}/sample/manifest.yml",
+                "C:/DEV/Onepoint/Smartplace/Product.AzureStorage/src/manifest.yml",
                 "-s",
-                "['pre:all', 'run:all']",
+                "['pre:all']",
                 "-c",
-                "['${workspaceFolder}/sample/configDomain.json', '${workspaceFolder}/sample/configEnv.json']",
+                "['C:/DEV/Onepoint/Smartplace/Infra.Configuration/op/config.json', 'C:/DEV/Onepoint/Smartplace/Infra.Configuration/op/dev3/config.json']",
                 "-l",
-                "DEBUG",
+                "INFO",
+                "-x",
+                "C:/DEV/Onepoint/lemniscat/github/lemniscat.runtime/output.json",
                 "-o",
-                "{ \"appName\": \"sample3\", \"scopeType\": \"developer\", \"developerEmail\": \"p.morisseau@groupeonepoint.com\", \"instanceCode\": \"1\", \"enableNetworkIsolation\": \"false\" }",
+                "{ \"appName\": \"sample4\", \"scopeType\": \"developer\", \"developerEmail\": \"p.morisseau@groupeonepoint.com\", \"instanceCode\": \"1\", \"enableNetworkIsolation\": \"false\", \"pipeline.templatePath\": \"C:/DEV/Onepoint/Smartplace/Pipelines.Templates\", \"product.tfPath\": \"C:/DEV/Onepoint/Smartplace/Product.AzureStorage/src/terraform\", \"product.tfVarsPath\": \"C:/DEV/Onepoint/Smartplace/Product.AzureStorage/src/config\", \"product.tfVarsFile\": \"variables.tfvars.json\", \"workspace.tfPath\": \"C:/DEV/Onepoint/Smartplace/Infra.Templates/terraform/workspace\" }",
             ]
         }
     ]

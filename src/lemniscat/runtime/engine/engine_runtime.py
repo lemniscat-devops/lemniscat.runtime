@@ -20,8 +20,7 @@ class OrchestratorEngine:
     _capabilities: Capabilities
     _steps: StepsParser
     plugins: PluginManager
-    
-
+    _outputContextPath: str = None
 
     def __init__(self, **args) -> None:
         self._logger = LogUtil.create(args['options']['log_level'])
@@ -29,11 +28,12 @@ class OrchestratorEngine:
         self._bagOfVariables = BagOfVariables(self._logger, args['options'])
         self._steps = StepsParser(self._logger, ast.literal_eval(args['options']['steps']))
         self._capabilities = self.__read_manifest(args['options']['manifest'])
+        self._outputContextPath = args['options']['output_context']
 
     def __read_manifest(self, manifest_path) -> Optional[Capabilities]:
         try:
             manifest_data = FileSystem.load_configuration_path(manifest_path)
-            capabilities = Capabilities(**manifest_data["capabilities"])
+            capabilities = Capabilities(self._bagOfVariables.get_all_without_sensitive(), **manifest_data["capabilities"])
             return capabilities
         except FileNotFoundError as e:
             self._logger.error('Unable to read configuration file', e)
@@ -75,7 +75,7 @@ class OrchestratorEngine:
                         self._bagOfVariables.interpret();    
                         task.status = 'Finished'
                 else:
-                    self._logger.info(f'    |->🚀 [{step}] Skipping task: {task.name}')
+                    self._logger.info(f'    |->🚀 [{step}] Skipping task: {task.displayName}')
                     self._logger.debug(f'    |->🚀 [{step}] Running task: {task.id}')
                      
     def __runSolution(self, capability: str, solution: Solution) -> None:
@@ -110,6 +110,11 @@ class OrchestratorEngine:
         self.__runCapability("operate", self._capabilities.operate)
         self.__runCapability("monitor", self._capabilities.monitor)
         self.__runCapability("plan", self._capabilities.plan)
+        
+        if(self._outputContextPath is not None):
+            self._logger.info(f"Saving output context...")
+            self._bagOfVariables.save(self._outputContextPath)
+            self._logger.info(f"Output context saved to: {self._outputContextPath}")
 
     def __reload_plugins(self) -> None:
         """Reset the list of all plugins and initiate the walk over the main

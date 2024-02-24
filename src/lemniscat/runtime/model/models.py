@@ -1,10 +1,12 @@
 import ast
 from dataclasses import dataclass
+import re
 from typing import List, Optional
 from lemniscat.core.model.models import VariableValue
 from lemniscat.core.util.helpers import LogUtil, FileSystem
 import uuid
 
+_REGEX_CAPTURE_VARIABLE = r"(?:\${{(?P<var>[^}]+)}})"
 
 @dataclass
 class PluginRunTimeOption(object):
@@ -80,15 +82,30 @@ class Task:
 class Template:
     path: str
     displayName: str = None
+    _variables: dict = None
     
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, variables: dict, **kwargs) -> None:
         self.path = kwargs['template']
+        self._variables = variables
         if(kwargs.__contains__('displayName')):
             val = kwargs['displayName']
             self.displayName = f'[{val}] '
     
+    def __intepretString(self, value: str) -> str:
+        matches = re.findall(_REGEX_CAPTURE_VARIABLE, value)
+        if(len(matches) > 0):
+            for match in matches:
+                var = str.strip(match)
+                if(var in self._variables):
+                    if(value == f'${{{{{match}}}}}'):
+                        value = self._variables[var]
+                    else:
+                        value = value.replace(f'${{{{{match}}}}}', self._variables[var])
+        return value
+    
     def getTasks(self) -> List[Task]:
-        tasks = FileSystem.load_configuration_path(self.path)
+        pathTmp = self.__intepretString(self.path)
+        tasks = FileSystem.load_configuration_path(pathTmp)
         result = []
         for task in tasks['tasks']:
             task['prefix'] = self.displayName
@@ -118,12 +135,12 @@ class Solution:
     def post_tasks(self) -> List[Task]:
         return [task for task in self.tasks if 'post' in task.steps and task.status == 'Pending']
     
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, variables: dict, **kwargs) -> None:
         self.name = kwargs['solution']
         self.tasks = []
         for task in kwargs['tasks']:
             if(dict(task).keys().__contains__('template')):
-                self.tasks.extend(Template(**task).getTasks())
+                self.tasks.extend(Template(variables, **task).getTasks())
             else:
                 self.tasks.append(Task(**task))    
         self.id = str(uuid.uuid4())
@@ -141,23 +158,23 @@ class Capabilities:
     monitor: Optional[List[Solution]] = None
     plan: Optional[List[Solution]] = None
     
-    def __init__(self, **kwargs) -> None:
+    def __init__(self, variables: dict, **kwargs) -> None:
         if kwargs['code'] is not None:
-            self.code = list(map(lambda x: Solution(**x), kwargs['code']))
+            self.code = list(map(lambda x: Solution(variables, **x), kwargs['code']))
         if kwargs['build'] is not None:    
-            self.build = list(map(lambda x: Solution(**x), kwargs['build']))
+            self.build = list(map(lambda x: Solution(variables, **x), kwargs['build']))
         if kwargs['test'] is not None:    
-            self.test = list(map(lambda x: Solution(**x), kwargs['test']))
+            self.test = list(map(lambda x: Solution(variables, **x), kwargs['test']))
         if kwargs['deploy'] is not None:    
-            self.deploy = list(map(lambda x: Solution(**x), kwargs['deploy']))
+            self.deploy = list(map(lambda x: Solution(variables, **x), kwargs['deploy']))
         if kwargs['release'] is not None:  
-            self.release = list(map(lambda x: Solution(**x), kwargs['release']))
+            self.release = list(map(lambda x: Solution(variables, **x), kwargs['release']))
         if kwargs['operate'] is not None:
-            self.operate = list(map(lambda x: Solution(**x), kwargs['operate']))
+            self.operate = list(map(lambda x: Solution(variables, **x), kwargs['operate']))
         if kwargs['monitor'] is not None:
-            self.monitor = list(map(lambda x: Solution(**x), kwargs['monitor']))
+            self.monitor = list(map(lambda x: Solution(variables, **x), kwargs['monitor']))
         if kwargs['plan'] is not None:
-            self.plan = list(map(lambda x: Solution(**x), kwargs['plan']))
+            self.plan = list(map(lambda x: Solution(variables, **x), kwargs['plan']))
 
 @dataclass
 class Manifest:

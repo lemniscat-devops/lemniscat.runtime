@@ -57,6 +57,13 @@ class BagOfVariables:
             return None
         return self._variables[key]
     
+    def get_all_without_sensitive(self) -> dict:
+        result = {}
+        for key in self._variables:
+            if(not self._variables[key].sensitive):
+                result[key] = self._variables[key].value
+        return result  
+    
     def get_all_for_capability(self, capability: str) -> dict:
         result = {}
         for key in self._variables.keys():
@@ -79,6 +86,15 @@ class BagOfVariables:
         
     def append(self, variables: dict) -> None:
         self._variables.update(variables)
+        
+    def save(self, filePath: str) -> None:
+        output = {}
+        for key in self._variables:
+            if(self._variables[key].sensitive == False):
+                output[key] = self._variables[key].value
+        
+        with open(filePath, 'w') as f:
+            json.dump(output, f)
 
     def __interpretDict(self, variable: dict) -> VariableValue:
         isSensitive = False
@@ -121,7 +137,10 @@ class BagOfVariables:
                 if(var in self._variables):
                     if(self._variables[var].sensitive):
                         isSensitive = True
-                    value = value.replace(f'${{{{{match}}}}}', self._variables[var].value)
+                    if(value == f'${{{{{match}}}}}'):
+                        value = self._variables[var].value
+                    else:
+                        value = value.replace(f'${{{{{match}}}}}', self._variables[var].value)
                     self._logger.debug(f"Interpreting variable: {var} -> {self._variables[var]}")
         return VariableValue(value, isSensitive)        
                         

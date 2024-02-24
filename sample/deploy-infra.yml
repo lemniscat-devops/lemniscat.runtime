@@ -48,3 +48,26 @@ tasks:
   parameters:
     action: apply
     tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+
+- task: azurecli
+  displayName: 'Set azure rbac'
+  steps:
+    - run
+  parameters:
+    scripttype: pwsh
+    commandtype: inline
+    script: | 
+      $result = Get-Location
+      $variables = Get-Content "$($result.path)/vars.json" | ConvertFrom-Json -Depth 100
+      foreach ($rbac in $variables.'product.rbac') {
+          $assignmentScope = $rbac.scope
+          $principalName = $rbac.principalName
+          $principalType = $rbac.principalType
+          $roleDefinitionName = $rbac.role
+          
+          & "C:\DEV\Onepoint\Smartplace\Pipelines.Templates\steps\azure\rbac_azure.ps1" -assignmentScope "$assignmentScope" -principalName "$principalName" -principalType "$principalType" -roleDefinitionName "$roleDefinitionName"
+      }
+      Write-Host "Rbac apply with success!"
+    storeVariablesInFile:
+      format: json
+      withSecrets: false

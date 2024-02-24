@@ -10,5 +10,26 @@
     "operate.tf.storage_account_name": "stcf3op",
     "operate.tf.container_name": "tfstates",
     "operate.tf.key": "${{ nc.rgName }}.azureworkspace.tfstate",
-    "product.owner.default.role": "Contributor"
+    "product.owner.default.role": "Contributor",
+    "azdo.admin.account": "smartplace-production-azdo",
+    "product.rbac": [
+        {
+            "principalName": "${{ ownerPrincipalName }}",
+            "principalType": "${{ ownerPrincipalType }}",
+            "role": "Storage Table Data Contributor",
+            "scope": "/subscriptions/${{ env.subscriptionId }}/resourceGroups/${{ nc.rgName }}/providers/Microsoft.Storage/storageAccounts/${{ nc.stName }}"
+        },
+        {
+            "principalName": "${{ ownerPrincipalName }}",
+            "principalType": "${{ ownerPrincipalType }}",
+            "role": "Storage Blob Data Contributor",
+            "scope": "/subscriptions/${{ env.subscriptionId }}/resourceGroups/${{ nc.rgName }}/providers/Microsoft.Storage/storageAccounts/${{ nc.stName }}"
+        },
+        {
+            "principalName": "${{ azdo.admin.account }}",
+            "principalType": "service-principal",
+            "role": "Contributor",
+            "scope": "/subscriptions/${{ env.subscriptionId }}/resourceGroups/${{ nc.rgName }}/providers/Microsoft.Storage/storageAccounts/${{ nc.stName }}"
+        }
+    ]
 }

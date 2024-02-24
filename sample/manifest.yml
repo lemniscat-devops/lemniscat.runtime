@@ -44,6 +44,9 @@ variables:
     value: ${{ env.st_pepSubnetPrefix }}  
   - name: workspaceScope
     value: '/subscriptions/${{ env.subscriptionId }}/resourceGroups/${{ nc.rgName }}'
+  - name: product.rbac
+    value: ${{ storageaccount.product.rbac }}
+      
 capabilities:
   code: null
   build: null
@@ -74,8 +77,8 @@ requirements:
   - name: lemniscat.plugin.terraform
     version: 0.1.0.20
   - name: lemniscat.plugin.powershell
-    version: 0.1.0.13
+    version: 0.1.0.14
   - name: lemniscat.plugin.filetransform
     version: 0.1.0.3
   - name: lemniscat.plugin.azurecli
-    version: 0.1.0.7
+    version: 0.1.0.9
