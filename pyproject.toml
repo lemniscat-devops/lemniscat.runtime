@@ -17,7 +17,12 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-dynamic = ["dependencies"]
+dependencies = [
+  "PyYAML == 6.0.1",
+  "packaging == 23.2",
+  "dacite == 1.8.1",
+  "lemniscat.core >= 0.1.3"
+]
 
 [project.scripts]
 lem = "lemniscat.runtime:lem"
@@ -33,6 +38,3 @@ package-dir = {"" = "src"}
 where = ["src"]
 include = ["lemniscat.runtime*"]
 namespaces = true
-
-[tool.setuptools.dynamic]
-dependencies = {file = ["src/lemniscat/requirements.txt"]}
