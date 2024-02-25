@@ -1,6 +1,6 @@
 import argparse
 import os
-from version import __version__, __release_date__
+from lemniscat.runtime.version import __version__, __release_date__
 
 ## Debugging
 if os.environ.get('LEM_DEBUG') == '1':
