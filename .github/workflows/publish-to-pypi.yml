@@ -38,7 +38,7 @@ jobs:
       if: startsWith(github.ref, 'refs/heads/feat/') || startsWith(github.ref, 'refs/heads/fix/')
       run: |
         $data = Get-Content -Path .\pyproject.toml -Raw
-        $data = $data -replace 'version = "0.0.1"', "version = ""$($env:GitVersion_MajorMinorPatch)"""
+        $data = $data -replace 'version = "0.0.1"', "version = ""$($env:GitVersion_MajorMinorPatch).$($env:GitVersion_CommitsSinceVersionSource)"""
         $data | Set-Content -Path .\pyproject.toml
     - name: Set up Python
       uses: actions/setup-python@v4
