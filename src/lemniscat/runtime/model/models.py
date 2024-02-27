@@ -3,10 +3,8 @@ from dataclasses import dataclass
 import re
 from typing import List, Optional
 from lemniscat.core.model.models import VariableValue
-from lemniscat.core.util.helpers import LogUtil, FileSystem
+from lemniscat.core.util.helpers import LogUtil, FileSystem, Interpreter
 import uuid
-
-_REGEX_CAPTURE_VARIABLE = r"(?:\${{(?P<var>[^}]+)}})"
 
 @dataclass
 class PluginRunTimeOption(object):
@@ -91,21 +89,8 @@ class Template:
             val = kwargs['displayName']
             self.displayName = f'[{val}] '
     
-    def __intepretString(self, value: str) -> str:
-        matches = re.findall(_REGEX_CAPTURE_VARIABLE, value)
-        if(len(matches) > 0):
-            for match in matches:
-                var = str.strip(match)
-                if(var in self._variables):
-                    if(value == f'${{{{{match}}}}}'):
-                        value = self._variables[var]
-                    else:
-                        value = value.replace(f'${{{{{match}}}}}', self._variables[var])
-        return value
-    
     def getTasks(self) -> List[Task]:
-        pathTmp = self.__intepretString(self.path)
-        tasks = FileSystem.load_configuration_path(pathTmp)
+        tasks = FileSystem.load_configuration_path(self.path)
         result = []
         for task in tasks['tasks']:
             task['prefix'] = self.displayName

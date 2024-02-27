@@ -11,8 +11,6 @@ from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError
 import ast
 import re
 
-_REGEX_CAPTURE_VARIABLE = r"(?:\${{(?P<var>[^}]+)}})"
-
 class OrchestratorEngine:
     """The orchestrator engine is the main entry point for the application"""
     _logger: Logger
@@ -33,7 +31,9 @@ class OrchestratorEngine:
     def __read_manifest(self, manifest_path) -> Optional[Capabilities]:
         try:
             manifest_data = FileSystem.load_configuration_path(manifest_path)
-            capabilities = Capabilities(self._bagOfVariables.get_all_without_sensitive(), **manifest_data["capabilities"])
+            capabilitiesData = manifest_data["capabilities"]
+            capabilitiesData = self._bagOfVariables.interpretManifest(capabilitiesData)
+            capabilities = Capabilities(self._bagOfVariables.get_all_without_sensitive(), **capabilitiesData)
             return capabilities
         except FileNotFoundError as e:
             self._logger.error('Unable to read configuration file', e)
@@ -41,29 +41,19 @@ class OrchestratorEngine:
             self._logger.error('Unable to parse plugin configuration to data class', e)
         return None
     
-    def __interpretTaskCondition(self, capability: str, condition: str) -> bool:
+    def __evalTaskCondition(self, capability: str, condition: str) -> bool:
         if(condition is None):
             return True
         if(isinstance(condition, str)):
-            variables = self._bagOfVariables.get_all_for_capability(capability)
-            matches = re.findall(_REGEX_CAPTURE_VARIABLE, condition)
-            if(len(matches) > 0):
-                for match in matches:
-                    var = str.strip(match)
-                    if(var in variables):
-                        condition = condition.replace(f'${{{{{match}}}}}', variables[var].value)
-                        self._logger.debug(f"Interpreting variable: {var} -> {variables[var]}")
-                    else:
-                        condition = condition.replace(f'${{{{{match}}}}}', "")
-                        self._logger.debug(f"Variable not found: {var}. Replaced by empty string.")
-        return eval(condition)
+            condition = self._bagOfVariables.interpretCondition(condition)
+            return eval(condition)
     
     def __runTasks(self, step: str, capability: str, solution: Solution) -> None:
         if(solution.status == 'Failed'):
             return
         for task in solution.tasks_byStep(step):
             if(self._steps.get(step, capability)):
-                if(task.condition is None or self.__interpretTaskCondition(capability, task.condition) == True):
+                if(task.condition is None or self.__evalTaskCondition(capability, task.condition) == True):
                     self._logger.info(f'     |->🚀 [{step}] Running task: {task.displayName}')
                     self._logger.debug(f'    |->🚀 [{step}] Running task: {task.id}')
                     taskResult = self.__invoke_on_plugin(task.name, task.parameters, self._bagOfVariables.get_all_for_capability(capability))
