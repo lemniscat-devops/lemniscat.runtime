@@ -31,7 +31,7 @@
                 "-x",
                 "C:/DEV/Onepoint/lemniscat/github/lemniscat.runtime/output.json",
                 "-o",
-                "{ \"appName\": \"sample6\", \"scopeType\": \"developer\", \"developerEmail\": \"p.morisseau@groupeonepoint.com\", \"instanceCode\": \"1\", \"enableNetworkIsolation\": \"false\", \"pipeline.templatePath\": \"C:/DEV/Onepoint/Smartplace/Pipelines.Templates\", \"product.tfPath\": \"C:/DEV/Onepoint/Smartplace/Product.AzureStorage/src/terraform\", \"product.tfVarsPath\": \"C:/DEV/Onepoint/Smartplace/Product.AzureStorage/src/config\", \"product.tfVarsFile\": \"variables.tfvars.json\", \"workspace.tfPath\": \"C:/DEV/Onepoint/Smartplace/Infra.Templates/terraform/workspace\" }",
+                "{ \"appName\": \"sample6\", \"scopeType\": \"developer\", \"developerEmail\": \"p.morisseau@groupeonepoint.com\", \"instanceCode\": \"1\", \"enableNetworkIsolation\": \"false\", \"sta_account_replication_type\": \"LRS\", \"pipeline.templatePath\": \"C:/DEV/Onepoint/Smartplace/Pipelines.Templates\", \"product.tfPath\": \"C:/DEV/Onepoint/Smartplace/Product.AzureStorage/src/terraform\", \"product.tfVarsPath\": \"C:/DEV/Onepoint/Smartplace/Product.AzureStorage/src/config\", \"product.tfVarsFile\": \"variables.tfvars.json\", \"workspace.tfPath\": \"C:/DEV/Onepoint/Smartplace/Infra.Templates/terraform/workspace\" }",
             ]
         }
     ]

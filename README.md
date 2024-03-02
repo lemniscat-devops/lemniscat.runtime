@@ -20,24 +20,17 @@ The runtime is based on the following key concepts:
 
 ### Capabilities
 
-The capabilities are the DevOps steps that can be activated during the deployment of a product. It's designed to be sure that all the DevOps aspects are covered during the design of a product. For example, you need 
+The capabilities are the DevOps steps that can be activated during the deployment of a product. It's designed to be sure that all the DevOps aspects are covered during the design of a product. 
+For each capability, you can define the solutions that need to be executed to activate the capability.
+For example, for capability code you can define Github and Gitlab as solutions to activate the capability when the product is deployed.
 
 ### Solutions
 
 The solutions are the tools that can be used to execute the capabilities. For example, you can use Jenkins to execute the build capability, or you can use Ansible to execute the deployment capability.
+For each solution, you can define the tasks that need to be executed to activate the capability.
+For example, for Azure (in operate capability), you can define the tasks that need to be executed to deploy infrastructure with Terraform.
 
-### Plugins
-
-The plugins are the tools that can be used to execute the tasks describe in the manifest file. For example, you can use the Ansible plugin to execute the deployment tasks describe in the manifest file.
-
-### Manifest file
-
-The manifest file is a YAML file that contains the definition of the product to deploy. It contains the variables needed to deploy the product, the capabilities that can be activated during the deployment, and the plugins needed to execute the tasks describe in the manifest file.
-
-### Configuration files
-
-The configuration files are the files that contain the variables needed to deploy the product. These files are used to define the variables needed to deploy the product, and to define the variables needed to execute the capabilities.
-The order of the configuration files is important. The variables defined in the first configuration file can be overridden by the variables defined in the second configuration file, and so on.
+### Tasks
 
 
 
