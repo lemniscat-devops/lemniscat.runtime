@@ -25,7 +25,7 @@ jobs:
       shell: pwsh
       run: |
         $data = Get-Content -Path .\src\lemniscat\runtime\version.py -Raw
-        $data = $data -replace "__version__ = '0.0.1'", "__version__ = '$($env:GitVersion_SemVer)'"
+        $data = $data -replace "__version__ = '0.0.1'", "__version__ = '$($env:GitVersion_MajorMinorPatch)'"
         $data | Set-Content -Path .\src\lemniscat\runtime\version.py
     - name: Set version in pyproject.toml for main branch
       shell: pwsh
@@ -89,6 +89,9 @@ jobs:
         path: dist/
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: ${{ secrets.PYPI_API_TOKEN }}
+        skip-existing: true
 
   github-release:
     name: >-
