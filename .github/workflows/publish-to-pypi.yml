@@ -6,7 +6,8 @@ jobs:
   build:
     name: Build distribution 📦
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.tag.outputs.VERSION }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -58,8 +59,14 @@ jobs:
         name: python-package-distributions
         path: dist/
     - name: Add git release tag
+      id: tag
       if: github.ref == 'refs/heads/main' # only tag on main branch
-      run: git tag -a ${{ env.GitVersion_SemVer }} -m "Release ${{ env.GitVersion_SemVer }}"
+      run: | 
+        git config --global user.email "runner@github.com"
+        git config --global user.name "Github Runner"
+        git tag -a ${{ env.GitVersion_SemVer }} -m "Release ${{ env.GitVersion_SemVer }}"
+        git push --tags
+        echo "VERSION=${{ env.GitVersion_SemVer }}" >> $GITHUB_OUTPUT
 
   publish-to-pypi:
     name: >-
@@ -89,6 +96,7 @@ jobs:
       and upload them to GitHub Release
     needs:
     - publish-to-pypi
+    - build
     runs-on: ubuntu-latest
 
     permissions:
@@ -112,7 +120,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       run: >-
         gh release create
-        '${{ github.ref_name }}'
+        '${{ needs.build.outputs.version }}'
         --repo '${{ github.repository }}'
         --notes ""
     - name: Upload artifact signatures to GitHub Release
@@ -123,7 +131,7 @@ jobs:
       # sigstore-produced signatures and certificates.
       run: >-
         gh release upload
-        '${{ github.ref_name }}' dist/**
+        '${{ needs.build.outputs.version }}' dist/**
         --repo '${{ github.repository }}'
 
   publish-to-testpypi:

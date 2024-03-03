@@ -650,7 +650,43 @@ Plugins need to be defined in the `requirements` section of the manifest file.
 
 After downloading the plugins, the runtime execute the workflow to activate the capabilities.
 
-> TODO
+> [!NOTE]
+> **Activation of the capabilities**
+> To activate a capability you must define a variable named `<capability>.enable` and set to `true`.
+>For example, to activate the code capability, you must define the following variable : `code.enable: true`.
+
+> [!NOTE]
+> **Define the solution to use**
+> To define the solution to use to activate a capability, you must define a variable named `<capability>.solution` and set to the name of the solution to use.
+> For example, to define Github as the solution to activate the code capability, you must define the following variable : `code.solution: Github`.
+
+For each capability enabled, the runtime execute the solution defined in variables.
+
+For each solution, the runtime execute the tasks defined.
+
+For each task, the runtime execute the plugin defined.
+If the plugin generate output, the runtime collect the output and store it in the context (the bag of variables).
+
+For example, if you define a task to create a repository with Github, the runtime will execute the Github plugin to create the repository. If the plugin generate the repository URL, the runtime will store the `repositoryURL` variables in the context.
+So the runtime will have the following variables :
+
+| Variable | Value |
+|----------|-------|
+| projectName | myProject |
+| description | This is my project |
+| visibility | private |
+| organization | myOrganization |
+| collaborators | ["user1", "user2"] |
+| permissions | ["contributor"] |
+| envName | developement |
+| location | West Europe |
+| subscriptionId | 12345678-1234-1234-1234-123456789012 |
+| rgName | myProject-myApp-developement-rg |
+| productName | myProject-myApp-developement-app |
+| appName | myApp |
+| repositoryURL | https://github.com/lemniscat-devops/lemniscat.runtime.git |
+
+After executing the plugin, the runtime interpret all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.
 
 ## 9. Save the output context
 
