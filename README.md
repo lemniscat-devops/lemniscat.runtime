@@ -363,11 +363,104 @@ capabilities:
       ...
 ```
 
+In order to factorize tasks in your solution, you can define templates for your tasks. For example, you can define a template to create and initialze a repository.
+To do that, you can use the following syntax in your manifest file:
+
+```yaml
+capabilities:
+  code :
+    - solutions: github
+      tasks:
+        - template: ${{ templates.path }}/createRepository.yaml
+          displayName: 'Create and initialize repository'
+```
+
+And in the `createRepository.yaml` file, you can define the following tasks:
+
+```yaml
+tasks:
+  - name: github
+    displayName: 'Create repository'
+    steps: 
+    - run
+    parameters:
+    action: createRepository
+    name: ${{ product.name }}
+    description: ${{ product.description }}
+    visibility: ${{ domain.visibility }}
+    organization: ${{ domain.organization }}
+    token: ${{ github.token }}
+    ...
+  - name: github
+    displayName: 'Add collaborators'
+    steps: 
+    - run
+    parameters:
+    action: addCollaborators
+    name: ${{ product.name }}
+    collaborators: ${{ product.collaborators }}
+    token: ${{ github.token }}
+  - name: github
+    displayName: 'clone repository'
+    steps: 
+    - run
+    parameters:
+    action: clone
+    name: ${{ product.name }}
+    token: ${{ github.token }}
+  - name: copy
+    displayName: 'Copy sample code'
+    steps: 
+    - pre
+    parameters:
+    source: ${{ product.source }}
+    destination: ${{ currentpath }}/${{ product.name }}
+  - name: git
+    displayName: 'Add files'
+    steps: 
+    - pre
+    parameters:
+    action: add
+    path: ${{ currentpath }}/${{ product.name }}
+  - name: git
+    displayName: 'Commit files'
+    steps: 
+    - pre
+    parameters:
+    action: commit
+    path: ${{ currentpath }}/${{ product.name }}
+    message: 'Initial commit'
+  - name: git
+    displayName: 'Push files'
+    steps: 
+    - pre
+    parameters:
+    action: push
+    path: ${{ currentpath }}/${{ product.name }}
+    token: ${{ github.token }}
+```
+
 ### Definition
 
-You can define as many tasks as you want for a solution. For example, you can define a task to create a repository, a task to add collaborators, a task to clone the repository, ...
+You can define as many tasks as you want for a solution. For example, you can define a task to create a repository, a task to add collaborators, a task to deploy the infrastructure, ...
 During the execution of the runtime, the tasks are executed in the same order as defined in the manifest file.
 
+To define a task, you need to define the following parameters:
+
+- `name: <pluginName>`, with `<pluginName>` the name of the plugin to execute. This parameter is mandatory.
+- `displayName: <displayName>`, with `<displayName>` the name of the task to display in the logs. This parameter is optional.
+- `steps: <steps>`, with `<steps>` the list of steps where the task needs to be executed. This parameter is mandatory.
+  For example, you can define `steps: ['pre', 'run']` to execute the task in the pre and run steps.
+- `parameters: <parameters>`, with `<parameters>` the parameters needed to execute the task. This parameter is mandatory.
+- `condition: <condition>`, with `<condition>` the condition to execute the task. This parameter is optional. The condition is a boolean expression that needs to be true to execute the task. The condition can be based on the variables defined in the manifest file.
+  For example, you can define `condition: "${{ productName }}" != ""` to execute the task only if the product name is not empty.
+
+You can also define a template for your tasks. For example, you can define a template to create and initialze a repository.
+
+To define a template, you need to define the following parameters:
+
+- `template: <templatePath>`, with `<templatePath>` the path to the template file to use. This parameter is mandatory.
+- `displayName: <displayName>`, with `<displayName>` the name of the task to display in the logs. This parameter is optional.
 
 ## Requirements
 
@@ -382,3 +475,186 @@ requirements:
     ...
   ...
 ```
+
+# Runtime : How it works
+
+The runtime work in 9 steps:
+
+1. **Load the configuration**: The runtime load the configuration files.
+2. **Load manifest variables**: The runtime load the variables defined in the manifest file.
+3. **Load the extra variables**: The runtime load the extra variables.
+4. **Interpete all the variables**: The runtime interpete all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.
+5. **Define the steps and capabilities to execute**: The runtime define the steps and capabilities to execute based on the parameters.
+6. **Read the manifest file (and templates)**: The runtime read the manifest file to get the definition of the product to intantiate.
+7. **Donwload (if needed) the plugins**: The runtime download the plugins needed to execute the tasks.
+8. **Execute the workflow**: The runtime execute the workflow to activate the capabilities.
+9. **Save the output context**: If it's defined, the runtime save the context (all variables) in the output file.
+
+## 1. Load the configuration
+
+The runtime load the configuration files. The configuration files are the files that contain the variables needed to instantiate the product. The order of the files is important. The variables defined in the first file can be overridden by the variables defined in the second file, and so on.
+
+> [!NOTE]
+> To load configuration files, you can use the `-c` or `--configFiles` parameter in the command line.
+
+For example, you can define a configuration file to define the variables decribed at project level like this :
+
+```json
+{
+    "projectName": "myProject",
+    "description": "This is my project",
+    "visibility": "private",
+    "organization": "myOrganization",
+    "collaborators": ["user1", "user2"],
+    "permissions": ["reader"]
+}
+```
+
+And you can define a configuration file to define the variables decribed at environment level like this :
+```json
+{
+    "envName": "developement",
+    "location": "West Europe",
+    "subscriptionId": "12345678-1234-1234-1234-123456789012",
+    "rgName": "${{ projectName }}-${{ appName }}-${{ envName }}-rg",
+    "permissions": ["contributor"]
+}
+```
+
+After loading previous files the runtime will have the following variables :
+
+| Variable | Value |
+|----------|-------|
+| projectName | myProject |
+| description | This is my project |
+| visibility | private |
+| organization | myOrganization |
+| collaborators | ["user1", "user2"] |
+| permissions | ["contributor"] |
+| envName | developement |
+| location | West Europe |
+| subscriptionId | 12345678-1234-1234-1234-123456789012 |
+| rgName | ${{ projectName }}-${{ appName }}-${{ envName }}-rg |
+
+## 2. Load manifest variables
+
+After loading the configuration files, the runtime load the variables defined in the manifest file. The variables defined in the manifest file can override the variables defined in the configuration files.
+
+For example, you can define a variable to define the name of the product, like this :
+
+```yaml
+variables:
+  - name: productName
+    value: ${{ projectName }}-${{ appName }}-${{ envName }}-app
+  ...
+```
+
+After loading the manifest file, the runtime will have the following variables :
+
+| Variable | Value |
+|----------|-------|
+| projectName | myProject |
+| description | This is my project |
+| visibility | private |
+| organization | myOrganization |
+| collaborators | ["user1", "user2"] |
+| permissions | ["contributor"] |
+| envName | developement |
+| location | West Europe |
+| subscriptionId | 12345678-1234-1234-1234-123456789012 |
+| rgName | ${{ projectName }}-${{ appName }}-${{ envName }}-rg |
+| productName | ${{ projectName }}-${{ appName }}-${{ envName }}-app |
+
+
+## 3. Load the extra variables
+
+After loading the configuration files, the runtime load the extra variables. The extra variables are the override variables to use. These variables are used to override the variables defined in the configuration files.
+
+> [!NOTE]
+> To load extra variables, you can use the `-x` or `--extraVariables` parameter in the command line.
+
+For example, you can define a extra variable to define the name of the product, like this :
+
+```json
+{
+    "appName": "myApp"
+}
+```
+
+After loading the extra variables, the runtime will have the following variables :
+
+| Variable | Value |
+|----------|-------|
+| projectName | myProject |
+| description | This is my project |
+| visibility | private |
+| organization | myOrganization |
+| collaborators | ["user1", "user2"] |
+| permissions | ["contributor"] |
+| envName | developement |
+| location | West Europe |
+| subscriptionId | 12345678-1234-1234-1234-123456789012 |
+| rgName | ${{ projectName }}-${{ appName }}-${{ envName }}-rg |
+| productName | ${{ projectName }}-${{ appName }}-${{ envName }}-app |
+| appName | myApp |
+
+## 4. Interpete all the variables
+
+After loading the extra variables, the runtime interpete all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.
+
+For example, the runtime will interpete the `rgName` variable to have the following value : `myProject-myApp-developement-rg`.
+After interpeting all the variables, the runtime will have the following variables :
+
+| Variable | Value |
+|----------|-------|
+| projectName | myProject |
+| description | This is my project |
+| visibility | private |
+| organization | myOrganization |
+| collaborators | ["user1", "user2"] |
+| permissions | ["contributor"] |
+| envName | developement |
+| location | West Europe |
+| subscriptionId | 12345678-1234-1234-1234-123456789012 |
+| rgName | myProject-myApp-developement-rg |
+| productName | myProject-myApp-developement-app |
+| appName | myApp |
+
+The interpreter can interprete `string` values, `int` values, `float` values, `boolean` values, `list` values and `dictionary` values.
+For example, if a variable contains a complex value like this :
+
+| Variable | Value |
+|----------|-------|
+| complexValue | { "productName": "${{ productName }}", "envName": "${{ envName }}" } |
+
+The interpreter will interpete the `complexValue` variable to have the following value : `{ "productName": "myProject-myApp-developement-app", "envName": "developement" }`.
+
+## 5. Define the steps and capabilities to execute
+
+After interpeting all the variables, the runtime define the steps and capabilities to execute based on the parameters.
+
+> [!NOTE]
+> To define the steps and capabilities to execute, you can use the `-s` or `--steps` parameter in the command line.
+
+## 6. Read the manifest file (and templates)
+
+After defining the steps and capabilities to execute, the runtime read the manifest file to get the definition of the product to intantiate.
+The runtime load the capabilities, the solutions, interprete templates and load the tasks to execute.
+
+## 7. Donwload (if needed) the plugins
+
+After reading the manifest file, the runtime download the plugins needed to execute the tasks.
+Plugins need to be defined in the `requirements` section of the manifest file.
+
+## 8. Execute the workflow
+
+After downloading the plugins, the runtime execute the workflow to activate the capabilities.
+
+> TODO
+
+## 9. Save the output context
+
+If it's defined, the runtime save the context (all variables interpreted) in the output file.
+
+> [!NOTE]
+> To save the context, you can use the `-o` or `--outputContext` parameter in the command line.
