@@ -21,7 +21,7 @@ dependencies = [
   "PyYAML == 6.0.1",
   "packaging == 23.2",
   "dacite == 1.8.1",
-  "lemniscat.core >= 0.1.11"
+  "lemniscat.core >= 0.2.0"
 ]
 
 [project.scripts]

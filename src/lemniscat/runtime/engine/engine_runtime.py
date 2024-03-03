@@ -21,12 +21,12 @@ class OrchestratorEngine:
     _outputContextPath: str = None
 
     def __init__(self, **args) -> None:
-        self._logger = LogUtil.create(args['options']['log_level'])
+        self._logger = LogUtil.create(args['options']['verbosity'])
         self.plugins = PluginManager(args['options'])
         self._bagOfVariables = BagOfVariables(self._logger, args['options'])
         self._steps = StepsParser(self._logger, ast.literal_eval(args['options']['steps']))
         self._capabilities = self.__read_manifest(args['options']['manifest'])
-        self._outputContextPath = args['options']['output_context']
+        self._outputContextPath = args['options']['outputContext']
 
     def __read_manifest(self, manifest_path) -> Optional[Capabilities]:
         try:

@@ -18,7 +18,7 @@ class BagOfVariables:
         
         self._logger = logger
         self._logger.info("Loading variables")
-        conf = args[0]['config_files']
+        conf = args[0]['configFiles']
         configFiles = ast.literal_eval(conf)
         for file in configFiles:
             self._logger.debug(f"Loading variables from file: {file}...")
@@ -33,7 +33,7 @@ class BagOfVariables:
         self._logger.debug(f"{len(variables)} loaded.")
         
         self._logger.debug(f"Override variables from parameters...")
-        override = json.loads(args[0]['override_variables'])        
+        override = json.loads(args[0]['extraVariables'])        
         if(override != None):
             for key in override:
                 self._variables[key] = VariableValue(override[key])

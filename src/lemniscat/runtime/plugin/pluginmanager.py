@@ -17,7 +17,7 @@ class PluginManager:
     _plugins: List[DependencyModule]
 
     def __init__(self, options: Dict) -> None:
-        self._logger = LogUtil.create(options['log_level'])
+        self._logger = LogUtil.create(options['verbosity'])
         self._plugins = self.__read_pluginDependencies(options['manifest'])
         self.plugin_util = PluginUtility(self._logger)
         self.modules = {}

@@ -26,8 +26,8 @@ def __init_cli() -> argparse:
         """
     )
     parser.add_argument(
-        '-l', '--log', default='INFO', help="""
-        Specify log level which should use. Default will always be DEBUG, choose between the following options
+        '-v', '--verbosity', default='INFO', help="""
+        Specify log verbosity which should use. Default will always be DEBUG, choose between the following options
         CRITICAL, ERROR, WARNING, INFO, DEBUG
         """
     )
@@ -42,12 +42,12 @@ def __init_cli() -> argparse:
         """
     )
     parser.add_argument(
-        '-o', '--overrideVariables', default='{}', help="""
+        '-x', '--extraVariables', default='{}', help="""
         (Optional) Supply a dictionary of variables which should be overridden. The default is {}
         """
     )
     parser.add_argument(
-        '-x', '--outpoutContext', default=None, help="""
+        '-o', '--outputContext', default=None, help="""
         (Optional) Supply a path to the output context. The default is None
         """
     )                  
@@ -80,11 +80,11 @@ def lem() -> None:
     __cli_args = __init_cli().parse_args()
     __init_app({
         'manifest': __cli_args.manifest,
-        'log_level': __cli_args.log,
+        'verbosity': __cli_args.verbosity,
         'steps': __cli_args.steps,
-        'config_files': __cli_args.configFiles,
-        'override_variables': __cli_args.overrideVariables,
-        'output_context': __cli_args.outpoutContext
+        'configFiles': __cli_args.configFiles,
+        'extraVariables': __cli_args.extraVariables,
+        'outputContext': __cli_args.outputContext
     })
 
 if __name__ == '__main__':

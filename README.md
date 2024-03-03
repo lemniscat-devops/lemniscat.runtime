@@ -18,6 +18,8 @@ This runtime is a set of tools to provide a DevOps approach to the development o
 
 The runtime is based on the following key concepts:
 
+
+
 ### Capabilities
 
 The capabilities are the DevOps steps that can be activated during the deployment of a product. It's designed to be sure that all the DevOps aspects are covered during the design of a product. 
@@ -52,22 +54,22 @@ pip install lemniscat-runtime
 To use the runtime, you can use the following command:
 
 ```bash
-lem -m <manifest_file> -c <config_files> -s <steps> -o <override_variables> -x <output_file> -l <verbosity>
+lem -m <manifest_file> -c <config_files> -s <steps> -x <extraVariables> -o <outputContextFile> -v <verbosity>
 ```
 
 ## Parameters
 
 `-m` or `--manifest`: **[Required]** The manifest file to use. This file contains the definition of the product to deploy.
 
-`-c` or `--config`: [Optional] The configuration files to use. These files contain the variables needed to deploy the product. 
+`-c` or `--configFiles`: [Optional] The configuration files to use. These files contain the variables needed to deploy the product. 
 
 `-s` or `--steps`: **[Required]** The steps to execute. These steps are defined in the manifest file.
 
-`-o` or `--override`: [Optional] The override variables to use. These variables are used to override the variables defined in the configuration files.
+`-x` or `--extraVariables`: [Optional] The override variables to use. These variables are used to override the variables defined in the configuration files.
 
-`-x` or `--output`: [Optional] The output file to use. This file contains all the variables computed during the execution.
+`-o` or `--outputContext`: [Optional] The output file to use. This file contains all the variables computed during the execution.
 
-`-l` or `--log` : [Optional] The verbosity level to use. This level is used to control the verbosity of the logs.
+`-v` or `--verbosity` : [Optional] The verbosity level to use. This level is used to control the verbosity of the logs.
 
 # Manifest file
 

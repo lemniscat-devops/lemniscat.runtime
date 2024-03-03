@@ -61,7 +61,7 @@ class PluginUtility:
             try:
                 python = sys.executable
                 exit_code = subprocess.check_call(
-                    [python, '-m', 'pip', 'install', missing.__str__(), '--index-url', 'https://test.pypi.org/simple/', '--extra-index-url', 'https://pypi.org/simple/'],
+                    [python, '-m', 'pip', 'install', missing.__str__(), '--index-url', 'https://pypi.org/simple/', '--extra-index-url', 'https://pypi.org/simple/'],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.DEVNULL
                 )
