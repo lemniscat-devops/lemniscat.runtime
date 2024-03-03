@@ -18,8 +18,8 @@ class StepsParser:
             
             if(parts[0] == 'all'):
                 steps = ['pre', 'run', 'post']
-            if(parts[0] == 'alldecom'):
-                steps = ['pre', 'decom', 'post']
+            if(parts[0] == 'allclean'):
+                steps = ['pre', 'clean', 'post']
             else:
                 steps = [parts[0]]
                 
