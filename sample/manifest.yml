@@ -54,23 +54,24 @@ capabilities:
   release: null
   deploy: null
   operate:
-    - solution: Azure
-      tasks:
-        - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\set-parameters-file.yml
-          displayName: 'Set parameters file'
-        - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\set-workspace.yml
-          displayName: 'Set workspace'
-        - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\deploy-infra.yml
-          displayName: 'Deploy infra'
+    solutions :
+      - solution: Azure
+        tasks:
+          - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\set-parameters-file.yml
+            displayName: 'Set parameters file'
+          - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\set-workspace.yml
+            displayName: 'Set workspace'
+          - template: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\deploy-infra.yml
+            displayName: 'Deploy infra'
 
-        - task: terraform
-          displayName: 'Terraform destroy'
-          steps:
-            - decom
-          parameters:
-            action: destroy
-            tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
-            tfVarFile: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\variables.tfvars.json
+          - task: terraform
+            displayName: 'Terraform destroy'
+            steps:
+              - decom
+            parameters:
+              action: destroy
+              tfPath: C:\DEV\Onepoint\Smartplace\Product.AzureStorage\src\terraform
+              tfVarFile: C:\DEV\Onepoint\lemniscat\github\lemniscat.runtime\sample\variables.tfvars.json
   monitor: null
   plan: null
 requirements:

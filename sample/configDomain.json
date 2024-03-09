@@ -6,6 +6,8 @@
     "monitor.solution": "Datadog",
     "code.enable": true,
     "code.solution": "GitHub",
+    "build.enable": true,
+    "build.solution": "Jenkins",
     "operate.enable": true,
     "operate.solution": "Azure",
     "operate.tfBackend": "azurerm",

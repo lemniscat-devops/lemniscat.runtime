@@ -166,46 +166,59 @@ The capabilities are the DevOps steps that can be activated during the deploymen
 For each capability, you can define the [solutions](#solutions) that need to be executed to activate the capability.
 For example, for capability code you can define Github and Gitlab as [solutions](#solutions) to activate the capability when the product is deployed.
 
+For each capability, you can define the other capability that need to be executed before. For example, you can define the `operate` capability to be executed before the `code` capability.
+To do that ou must define the `dependsOn` parameter in the capability definition. `dependsOn` is a list of capabilities that need to be executed before the current capability. This parameter is optional.
+
 The capabilities are defined in the `capabilities` section of the manifest file, and are defined as a dictionary with the following structure:
 
 ```yaml
 capabilities:
   code:
+    dependsOn:
+    - operate
+    solutions:
     - solution: github
       ...
     - solution: gitlab
       ...
   build:
+    solutions:
     - solution: jenkins
       ...
     - solution: azuredevops
       ...
   test:
+    solutions:
     - solution: sonarqube
       ...
     - solution: jenkins
       ...
   release:
+    solutions: 
     - solution: artifactory
       ...
     - solution: azure-container-registry
       ...
   deploy:
+    solutions:
     - solution: azuredevops
       ...
     - solution: argocd
       ...
   operate:
+    solutions:
     - solution: azure
       ...
     - solution: aws
       ...
   monitor:
+    solutions:
     - solution: grafana
       ...
     - solution: datadog
       ...
   plan:
+    solutions:
     - solution: Jira
       ...
     - solution: PagerDuty
@@ -241,7 +254,8 @@ The solutions are defined in the capability section of the manifest file, and ar
 ```yaml
 capabilities:
   code :
-    - solutions: github
+    solutions:
+    - solution: github
       tasks:
         - name: github
           steps: 
@@ -282,7 +296,8 @@ To define a solution, you need to define the following parameters:
 For each solution, you can define the [tasks](#tasks) that need to be executed to activate the capability. The tasks are defined in the `tasks` section of the solution, and are defined as a dictionary with the following structure:
 
 ```yaml
-- solutions: github
+solutions:
+- solution: github
   tasks:
     ...
 ```
@@ -299,7 +314,8 @@ The tasks are defined in the solution section of the manifest file, and are defi
 ```yaml
 capabilities:
   code :
-    - solutions: github
+    solutions:
+    - solution: github
       tasks:
         - name: github
           displayName: 'Create repository'
@@ -663,6 +679,22 @@ After downloading the plugins, the runtime execute the workflow to activate the 
 For each capability enabled, the runtime execute the solution defined in variables.
 
 For each solution, the runtime execute the tasks defined.
+
+### Workflow execution
+The tasks are always executed in a specific order. The order is defined by the steps defined for each task.
+If you execute the runtime with the `--steps ["all:code"]` parameter, the runtime will execute all the tasks (exept `clean` steps) with this order :
+1. All tasks with the `pre` step
+2. All tasks with the `run` step
+3. All tasks with the `post` step
+
+If you execute the runtime with the `--steps ["allclean:code"]` parameter, the runtime will execute all the tasks (exept `run` steps) with this order :
+1. All tasks with the `pre` step
+2. All tasks with the `clean` step
+3. All tasks with the `post` step
+
+> [!NOTE]
+> If your task is tagged with multiple steps and the runtime is launched to execute this steps both, the task will be executed once.
+> For example, if you execute the runtime with the `--steps ["all:code"]` parameter and you have a task with the steps `pre` and `run` (for exemple with Terraform init), the runtime will execute all the tasks with the `pre` step and ignore `run` step.
 
 For each task, the runtime execute the plugin defined.
 If the plugin generate output, the runtime collect the output and store it in the context (the bag of variables).
