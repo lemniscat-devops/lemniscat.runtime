@@ -24,7 +24,9 @@ markdown_extensions:
   - pymdownx.snippets
 
 nav:
-  - README.md
+  - ../README.md
+
+docs_dir: doc
 
 extra_css:
   - stylesheets/extra.css
