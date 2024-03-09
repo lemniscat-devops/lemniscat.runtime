@@ -19,4 +19,4 @@ jobs:
       - run: pip install pygments==2.11.2
       - run: pip install pymdown-extensions==9.3 
       - run: pip install mkdocs-material-relative-language-selector==1.1.4
-      - run: mkdocs gh-deploy --force --config-file doc/mkdocs.yml
+      - run: mkdocs gh-deploy --force
