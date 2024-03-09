@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@morisseauphi" />
+  <meta name="twitter:creator" content="@morisseauphi" />
+  <meta property="og:title" content="{{ page.title }}" />
+  <meta name="google-site-verification" content="w_wkWaWiJN0xRkstken01Q7CmA4d_jKTliKb5ilkQlU" />
+  {% if page.meta is defined %}
+  <meta property="og:image" content="{{ config.site_url ~ page.meta.image }}" />
+  <meta property="og:description" content="{{ page.meta.summary }}" />
+  <meta property="og:url" content="{{ config.site_url ~ page.url }}" />
+  <meta name="Description" CONTENT="{{ page.meta.summary }}" />
+  {% endif %}
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T8TQW7CYM4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T8TQW7CYM4');
+  </script>
+  <link href="{{ 'stylesheets/custom.css'|url }}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  {{ page.content }}
+  {% set blog_posts = [] %}
+  {% for page in nav.pages %}
+    {% if page.url.startswith("en/" + config.extra.blog.dir) and page.meta.date is defined %}
+      <!-- or "" suppresses "None" output-->
+      {{ blog_posts.append( page ) or "" }}
+    {% endif %}
+  {% endfor %}
+
+  {% for page in (blog_posts|sort(attribute="meta.date", reverse=True))[:config.extra.blog.list_length] %}
+    <div class="blog-item">
+      <div class="blog-image">
+        {% if page.meta.image is defined %}
+        <img alt={{ page.title }} src="../{{ page.meta.image }}">
+        {% endif %}
+      </div>
+      <div class="blog-info">
+        <h2><a href="{{ page.url|url }}">{{ page.title }}</a></h2>
+        {% if page.meta.categorie is defined %}
+        <h5>{{ page.meta.categorie }}</h5>
+        {% endif %}
+        <p>
+          {{ page.meta.summary }}
+        </p>
+        <div>
+          {% if page.meta.tags is defined %}
+          {% for tag in page.meta.tags %}
+            <span class="tag">
+              {% include ".icons/octicons/tag-16.svg" %}{{ tag }}
+            </span>
+            {% endfor %}
+          {% endif %}
+        </div>
+        {% include "partials/blog_metadata_en.html" %}
+        <!-- Use a hidden p tag to provide a preview -->
+        {% if config.extra.blog.extended_preview %}
+          {{ page.content.split("<p hidden>#more</p>", 1)[0] }}
+          <a href="{{ page.url|url }}#more">
+            <span class="twemoji">
+              {% include ".icons/octicons/arrow-right-24.svg" %}
+            </span>
+            Continue reading
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+{% endblock %}

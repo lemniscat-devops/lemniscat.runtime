@@ -1,0 +1,23 @@
+name: github-pages 
+on:
+  push:
+    branches: 
+      - feat/github_pages  
+
+jobs:
+  deploy-ToGithubPages:
+    runs-on: ubuntu-latest
+    env:
+      SITE_URL: "https://lemniscat-devops.github.io/Blog"
+    environment: github-pages  
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+      - run: cd doc
+      - run: pip install mkdocs-material
+      - run: pip install pygments==2.11.2
+      - run: pip install pymdown-extensions==9.3 
+      - run: pip install mkdocs-material-relative-language-selector==1.1.4
+      - run: mkdocs gh-deploy --force

@@ -1,0 +1,41 @@
+site_name: "Lemniscat"
+site_url: !!python/object/apply:os.getenv ["SITE_URL"]
+theme:
+  name: material
+  language: fr
+  custom_dir: doc/overrides
+  palette:
+    scheme: default
+    primary: purple
+  font:
+    text: Poppins
+
+plugins:
+  - search
+  - material-relative-language-selector:
+      root_domain: true
+
+markdown_extensions:
+  - admonition
+  - def_list
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+
+extra_css:
+  - stylesheets/extra.css
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/morisseauphi
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/in/pmorisseau
+  blog:
+    dir: articles
+    author: Philippe Morisseau
+    author_image: https://avatars.githubusercontent.com/u/9535367?v=4
+    words_read_per_minute: 300
+    list_length: 25
+    extended_preview: false
