@@ -1,7 +1,7 @@
 # lemniscat.runtime
 A runtime to provide product oriented in DevOps approach
 
-# Description
+## Description
 
 This runtime is a set of tools to provide a DevOps approach to the development of products. It is based on the following principles:
 - **Product oriented**: The runtime is designed to be used in the development of products, not in the development of software. This means that the runtime is designed to be used in the development of products that are composed of software, hardware, and other components.
@@ -14,32 +14,32 @@ This runtime is a set of tools to provide a DevOps approach to the development o
 - **Cloud agnostic**: The runtime is designed to be used with any cloud provider, so that it can be used with any cloud provider.
 - **locally executable**: The runtime is designed to be executed locally, so that it can be used in a local environment to help the development of products (for example).
 
-## System model
+### System model
 
 The runtime is based on the following system model:
 
 ![system model](/doc/img/system-model.png)
 
-### Capabilities
+#### Capabilities
 
 The capabilities are the DevOps steps that can be activated during the deployment of a product. It's designed to be sure that all the DevOps aspects are covered during the design of a product. 
 For each capability, you can define the [solutions](#solutions) that need to be executed to activate the capability.
 For example, for capability code you can define Github and Gitlab as [solutions](#solutions) to activate the capability when the product is deployed.
 
-### Solutions
+#### Solutions
 
 The solutions are the tools that can be used to execute the capabilities. For example, you can use Jenkins to execute the build capability, or you can use Ansible to execute the deployment capability.
 For each solution, you can define a workflow with the [tasks](#tasks) that need to be executed to activate the capability.
 For example, for Azure (in operate capability), you can define the [tasks](#tasks) that need to be executed to deploy infrastructure with Terraform.
 
-### Tasks
+#### Tasks
 
 The tasks are the actions that need to be executed to activate the capability. For example, you can define a task to execute a script, or a task to execute a terraform command.
 For each task, you need to tag in witch [step](#step-concept) it needs to be executed, and the parameters that need to be used to execute the task.
 You can define many tags for a task, and the task will be executed in the same step as the tag.
 In the same step, the tasks are executed in the same order as defined in the manifest file.
 
-### Step concept
+#### Step concept
 
 The step is the concept that defines the big stages of the instantiation of the product. It's designed to be sure that all the tasks are executed in the right order during the instantiation of the product.
 Their are 4 steps:
@@ -48,20 +48,20 @@ Their are 4 steps:
 - **post**: The step to finalize the instantiation of the product. For example, you can use this step to execute the tests, generate the documentation, register the product in the CMDB, ...
 - **clean**: The step to clean the instantiation of the product. For example, you can use this step to delete the infrastructure, delete the git repository, ...
 
-# Installation
+## Installation
 
-## Requirements
+### Requirements
 The runtime requires Python 3.10 or later and the following packages:
 `setup-tools`
 
-## Install the runtime
+### Install the runtime
 To install the runtime, you can use the following command:
 
 ```bash
 pip install lemniscat-runtime
 ```
 
-# Usage
+## Usage
 
 To use the runtime, you can use the following command:
 
@@ -69,7 +69,7 @@ To use the runtime, you can use the following command:
 lem -m <manifest_file> -c <config_files> -s <steps> -x <extraVariables> -o <outputContextFile> -v <verbosity>
 ```
 
-## Parameters
+### Parameters
 
 `-m` or `--manifest`: **[Required]** The manifest file to use. This file contains the definition of the product to instantiate.
 
@@ -83,18 +83,18 @@ lem -m <manifest_file> -c <config_files> -s <steps> -x <extraVariables> -o <outp
 
 `-v` or `--verbosity` : [Optional] The verbosity level to use. This level is used to control the verbosity of the logs.
 
-## Definition
+### Definition
 
-### Manifest
+#### Manifest
 
 The parameters `-m` or `--manifest` is the path to the manifest file to use. This file contains the definition of the product to instantiate.
 
-### Config files
+#### Config files
 
 The parameters `-c` or `--configFiles` is the path to the configuration files to use. These files contain the variables needed to instantiate the product.
 The order of the files is important. The variables defined in the first file can be overridden by the variables defined in the second file, and so on.
 
-### Steps
+#### Steps
 
 The parameters `-s` or `--steps` is the steps and capabilities to execute. These steps are defined in the manifest file.
 You need to respect the naming convention to be sure that the runtime can execute the steps :
@@ -120,7 +120,7 @@ For example :
 - to execute all the cleanup steps for the code capability, you must define : `-s ['allclean:code']`
 - to execute all the cleanup steps for all capability, you must define : `-s ['allclean:all']`
 
-# Manifest file
+## Manifest file
 
 The manifest file is a YAML file that contains the definition of the product to deploy. It contains the following sections:
 
@@ -128,7 +128,7 @@ The manifest file is a YAML file that contains the definition of the product to 
 - **capabilities**: The capabilities can be activated during the product deployment.
 - **requirements**: The plugins needed to execute tasks describe in the manifest file.
 
-## Variables
+### Variables
 
 The variables are the static parameters needed to deploy the product. They are defined in the manifest file, and can be used in the tasks to execute.
 For example, you can define a variable to define the name of the product, and use this variable in the tasks to create the product.
@@ -160,7 +160,7 @@ variables:
   ...
 ```
 
-## Capabilities
+### Capabilities
 
 The capabilities are the DevOps steps that can be activated during the deployment of a product. It's designed to be sure that all the DevOps aspects are covered during the design of a product.
 For each capability, you can define the [solutions](#solutions) that need to be executed to activate the capability.
@@ -225,7 +225,7 @@ capabilities:
       ...
 ```
 
-### Definition
+#### Definition
 
 Here, the list of capabilities that you can define in the manifest file:
 
@@ -243,7 +243,7 @@ Of course, you don't have to define all the capabilities in the manifest file. Y
 You can't define the same capability twice in the manifest file. If you define the same capability twice, the runtime will raise an error.
 You can't define a capability that is not in the list above. If you define a capability that is not in the list above, the runtime will raise an error.
 
-## Solutions
+### Solutions
 
 The solutions are the tools that can be used to execute the capabilities. For example, you can use Jenkins to execute the build capability, or you can use Ansible to execute the deployment capability.
 For each solution, you can define a workflow with the [tasks](#tasks) that need to be executed to activate the capability.
@@ -284,7 +284,7 @@ capabilities:
   ...
 ```	
 
-### Definition
+#### Definition
 
 You can define as many solutions as you want for a capability. For example, you can define Github and Gitlab as solutions for the code capability.
 You can't define the same solution twice for a capability. If you define the same solution twice for a capability, the runtime will raise an error.
@@ -302,7 +302,7 @@ solutions:
     ...
 ```
 
-## Tasks
+### Tasks
 
 The tasks are the actions that need to be executed to activate the capability. For example, you can define a task to execute a script, or a task to execute a terraform command.
 For each task, you need to tag in witch [step](#step-concept) it needs to be executed, and the parameters that need to be used to execute the task.
@@ -456,7 +456,7 @@ tasks:
     token: ${{ github.token }}
 ```
 
-### Definition
+#### Definition
 
 You can define as many tasks as you want for a solution. For example, you can define a task to create a repository, a task to add collaborators, a task to deploy the infrastructure, ...
 During the execution of the runtime, the tasks are executed in the same order as defined in the manifest file.
@@ -478,7 +478,7 @@ To define a template, you need to define the following parameters:
 - `template: <templatePath>`, with `<templatePath>` the path to the template file to use. This parameter is mandatory.
 - `displayName: <displayName>`, with `<displayName>` the name of the task to display in the logs. This parameter is optional.
 
-## Requirements
+### Requirements
 
 The requirements are the plugins needed to execute tasks describe in the manifest file. They are defined in the `requirements` section of the manifest file, and are defined as a dictionary with the following structure:
 
@@ -492,7 +492,7 @@ requirements:
   ...
 ```
 
-# Runtime : How it works
+## Runtime : How it works
 
 The runtime work in 9 steps:
 
@@ -506,7 +506,7 @@ The runtime work in 9 steps:
 8. **Execute the workflow**: The runtime execute the workflow to activate the capabilities.
 9. **Save the output context**: If it's defined, the runtime save the context (all variables) in the output file.
 
-## 1. Load the configuration
+### 1. Load the configuration
 
 The runtime load the configuration files. The configuration files are the files that contain the variables needed to instantiate the product. The order of the files is important. The variables defined in the first file can be overridden by the variables defined in the second file, and so on.
 
@@ -552,7 +552,7 @@ After loading previous files the runtime will have the following variables :
 | subscriptionId | 12345678-1234-1234-1234-123456789012 |
 | rgName | ${{ projectName }}-${{ appName }}-${{ envName }}-rg |
 
-## 2. Load manifest variables
+### 2. Load manifest variables
 
 After loading the configuration files, the runtime load the variables defined in the manifest file. The variables defined in the manifest file can override the variables defined in the configuration files.
 
@@ -582,7 +582,7 @@ After loading the manifest file, the runtime will have the following variables :
 | productName | ${{ projectName }}-${{ appName }}-${{ envName }}-app |
 
 
-## 3. Load the extra variables
+### 3. Load the extra variables
 
 After loading the configuration files, the runtime load the extra variables. The extra variables are the override variables to use. These variables are used to override the variables defined in the configuration files.
 
@@ -614,7 +614,7 @@ After loading the extra variables, the runtime will have the following variables
 | productName | ${{ projectName }}-${{ appName }}-${{ envName }}-app |
 | appName | myApp |
 
-## 4. Interpete all the variables
+### 4. Interpete all the variables
 
 After loading the extra variables, the runtime interpete all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.
 
@@ -645,24 +645,24 @@ For example, if a variable contains a complex value like this :
 
 The interpreter will interpete the `complexValue` variable to have the following value : `{ "productName": "myProject-myApp-developement-app", "envName": "developement" }`.
 
-## 5. Define the steps and capabilities to execute
+### 5. Define the steps and capabilities to execute
 
 After interpeting all the variables, the runtime define the steps and capabilities to execute based on the parameters.
 
 > [!NOTE]
 > To define the steps and capabilities to execute, you can use the `-s` or `--steps` parameter in the command line.
 
-## 6. Read the manifest file (and templates)
+### 6. Read the manifest file (and templates)
 
 After defining the steps and capabilities to execute, the runtime read the manifest file to get the definition of the product to intantiate.
 The runtime load the capabilities, the solutions, interprete templates and load the tasks to execute.
 
-## 7. Donwload (if needed) the plugins
+### 7. Donwload (if needed) the plugins
 
 After reading the manifest file, the runtime download the plugins needed to execute the tasks.
 Plugins need to be defined in the `requirements` section of the manifest file.
 
-## 8. Execute the workflow
+### 8. Execute the workflow
 
 After downloading the plugins, the runtime execute the workflow to activate the capabilities.
 
@@ -720,7 +720,7 @@ So the runtime will have the following variables :
 
 After executing the plugin, the runtime interpret all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.
 
-## 9. Save the output context
+### 9. Save the output context
 
 If it's defined, the runtime save the context (all variables interpreted) in the output file.
 
