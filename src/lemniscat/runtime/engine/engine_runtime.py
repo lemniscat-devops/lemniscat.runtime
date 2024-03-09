@@ -75,7 +75,15 @@ class OrchestratorEngine:
         self.__runTasks('decom', capability, solution)
         self.__runTasks('post', capability, solution)  
      
-    def __runCapability(self, current: str, capability: Optional[List[Solution]]) -> None:
+    def __runCapabilities(self) -> None: 
+        for capability in self._capabilities.order:
+            status = self.__runCapability(capability, self._capabilities.capability[capability])  
+            if(status == 'Failed'):
+                self._logger.error(f'Capability: {capability} failed')
+                break 
+     
+    def __runCapability(self, current: str, capability: Optional[List[Solution]]) -> str:
+        status = 'Finished'
         self._logger.info(f'🦾 Running capability: {current}')
         if(not capability is None): 
             isEnable = self._bagOfVariables.get(f"{current}.enable")
@@ -86,21 +94,17 @@ class OrchestratorEngine:
                         self.__runSolution(current, solution)
                     else:
                         self._logger.debug(f'    Skipping solution: {solution.name}')
+                    if(solution.status == 'Failed'):
+                        status = 'Failed'
+                        break
         else:
             self._logger.debug(f'Skipping capability: {current}')
+        return status
 
     def start(self) -> None:
         self.__reload_plugins()
-        
-        self.__runCapability("code", self._capabilities.code)
-        self.__runCapability("build", self._capabilities.build)
-        self.__runCapability("test", self._capabilities.test)
-        self.__runCapability("deploy", self._capabilities.deploy)
-        self.__runCapability("release", self._capabilities.release)
-        self.__runCapability("operate", self._capabilities.operate)
-        self.__runCapability("monitor", self._capabilities.monitor)
-        self.__runCapability("plan", self._capabilities.plan)
-        
+        self.__runCapabilities()
+  
         if(self._outputContextPath is not None):
             self._logger.info(f"Saving output context...")
             self._bagOfVariables.save(self._outputContextPath)

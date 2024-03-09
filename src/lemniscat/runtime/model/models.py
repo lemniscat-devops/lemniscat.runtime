@@ -131,35 +131,72 @@ class Solution:
         self.id = str(uuid.uuid4())
         self.status = 'Pending'
 
-
 @dataclass
 class Capabilities:
-    code : Optional[List[Solution]] = None
-    build: Optional[List[Solution]] = None
-    test: Optional[List[Solution]] = None
-    deploy: Optional[List[Solution]] = None
-    release: Optional[List[Solution]] = None
-    operate: Optional[List[Solution]] = None
-    monitor: Optional[List[Solution]] = None
-    plan: Optional[List[Solution]] = None
+    capability: dict
+    order: List[str] = None
+    
+    def __reorder(self, capability: str, dependsOn: List[str]) -> None:
+        idx = self.order.index(capability)
+        self.order.pop(idx)
+        newPosition = 0 
+        for item in dependsOn:
+            if(newPosition < self.order.index(item)):
+                newPosition = self.order.index(item)
+        self.order.insert(newPosition + 1, capability)
     
     def __init__(self, variables: dict, **kwargs) -> None:
+        self.capability = {}
+        self.order = ['code', 'build', 'test', 'deploy', 'release', 'operate', 'monitor', 'plan']
         if kwargs['code'] is not None:
-            self.code = list(map(lambda x: Solution(variables, **x), kwargs['code']))
+            self.capability['code'] = list(map(lambda x: Solution(variables, **x), kwargs['code']['solutions']))
+            if kwargs['code'].__contains__('dependsOn'):
+                self.__reorder('code', kwargs['code']['dependsOn'])
+        else:
+            self.capability['code'] = None
         if kwargs['build'] is not None:    
-            self.build = list(map(lambda x: Solution(variables, **x), kwargs['build']))
+            self.capability['build'] = list(map(lambda x: Solution(variables, **x), kwargs['build']['solutions']))
+            if kwargs['build'].__contains__('dependsOn'):
+                self.__reorder('build', kwargs['build']['dependsOn'])
+        else:
+            self.capability['build'] = None
         if kwargs['test'] is not None:    
-            self.test = list(map(lambda x: Solution(variables, **x), kwargs['test']))
+            self.capability['test'] = list(map(lambda x: Solution(variables, **x), kwargs['test']['solutions']))
+            if kwargs['test'].__contains__('dependsOn'):
+                self.__reorder('test', kwargs['test']['dependsOn'])
+        else:
+            self.capability['test'] = None
         if kwargs['deploy'] is not None:    
-            self.deploy = list(map(lambda x: Solution(variables, **x), kwargs['deploy']))
+            self.capability['deploy'] = list(map(lambda x: Solution(variables, **x), kwargs['deploy']['solutions']))
+            if kwargs['deploy'].__contains__('dependsOn'):
+                self.__reorder('deploy', kwargs['deploy']['dependsOn'])
+        else:
+            self.capability['deploy'] = None
         if kwargs['release'] is not None:  
-            self.release = list(map(lambda x: Solution(variables, **x), kwargs['release']))
+            self.capability['release'] = list(map(lambda x: Solution(variables, **x), kwargs['release']['solutions']))
+            if kwargs['release'].__contains__('dependsOn'):
+                self.__reorder('release', kwargs['release']['dependsOn'])
+        else:
+            self.capability['release'] = None
         if kwargs['operate'] is not None:
-            self.operate = list(map(lambda x: Solution(variables, **x), kwargs['operate']))
+            self.capability['operate'] = list(map(lambda x: Solution(variables, **x), kwargs['operate']['solutions']))
+            if kwargs['operate'].__contains__('dependsOn'):
+                self.__reorder('operate', kwargs['operate']['dependsOn'])
+        else:
+            self.capability['operate'] = None
         if kwargs['monitor'] is not None:
-            self.monitor = list(map(lambda x: Solution(variables, **x), kwargs['monitor']))
+            self.capability['monitor'] = list(map(lambda x: Solution(variables, **x), kwargs['monitor']['solutions']))
+            if kwargs['monitor'].__contains__('dependsOn'):
+                self.__reorder('monitor', kwargs['monitor']['dependsOn'])
+        else:
+            self.capability['monitor'] = None
         if kwargs['plan'] is not None:
-            self.plan = list(map(lambda x: Solution(variables, **x), kwargs['plan']))
+            self.capability['plan'] = list(map(lambda x: Solution(variables, **x), kwargs['plan']['solutions']))
+            if kwargs['plan'].__contains__('dependsOn'):
+                self.__reorder('plan', kwargs['plan']['dependsOn'])
+        else:
+            self.capability['plan'] = None
+            
 
 @dataclass
 class Manifest:
