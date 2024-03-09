@@ -8,7 +8,7 @@ tag-prefix: '[vV]'
 major-version-bump-message: '(breaking|major):'
 minor-version-bump-message: '(feature|feat|minor):'
 patch-version-bump-message: '(fix|hotfix|patch):'
-no-bump-message: '(none|skip):'
+no-bump-message: '(none|skip|chore):'
 legacy-semver-padding: 4
 build-metadata-padding: 4
 commits-since-version-source-padding: 4
