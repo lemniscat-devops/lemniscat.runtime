@@ -5,15 +5,13 @@ theme:
   language: fr
   custom_dir: doc/overrides
   palette:
-    scheme: default
-    primary: purple
+    scheme: slate
+    primary: amber
   font:
     text: Poppins
 
 plugins:
   - search
-  - material-relative-language-selector:
-      root_domain: true
 
 markdown_extensions:
   - admonition
@@ -23,10 +21,14 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.snippets
 
-nav:
-  - ../README.md
+docs_dir: doc/docs
 
-docs_dir: doc
+nav:
+  - How it is ? : index.md
+  - How to install ? : setup.md
+  - How to use ? : usage.md
+  - How to write a Manifest ? : manifest.md
+  - How it' works ? : runtime.md
 
 extra_css:
   - stylesheets/extra.css
