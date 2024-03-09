@@ -8,7 +8,7 @@ jobs:
   deploy-ToGithubPages:
     runs-on: ubuntu-latest
     env:
-      SITE_URL: "https://lemniscat-devops.github.io/docs/"
+      SITE_URL: "https://lemniscat-devops.github.io/lemniscat.runtime/"
     environment: github-pages  
     steps:
       - uses: actions/checkout@v2

@@ -23,6 +23,8 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.snippets
 
+docs_dir: ""
+
 extra_css:
   - stylesheets/extra.css
 
