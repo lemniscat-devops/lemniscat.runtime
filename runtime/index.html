@@ -1,0 +1,1029 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://lemniscat-devops.github.io/lemniscat.runtime/runtime/">
+      
+      
+        <link rel="prev" href="../manifest/">
+      
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+    
+    
+      
+        <title>How it' works ? - Lemniscat</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e359304.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Poppins";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@morisseauphi" />
+  <meta name="twitter:creator" content="@morisseauphi" />
+  <meta property="og:title" content="How it' works ?" />
+  <meta name="google-site-verification" content="w_wkWaWiJN0xRkstken01Q7CmA4d_jKTliKb5ilkQlU" />
+  
+  <meta property="og:image" content="https://lemniscat-devops.github.io/lemniscat.runtime/" />
+  <meta property="og:description" content="" />
+  <meta property="og:url" content="https://lemniscat-devops.github.io/lemniscat.runtime/runtime/" />
+  <meta name="Description" CONTENT="" />
+  
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T8TQW7CYM4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T8TQW7CYM4');
+  </script>
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#1-load-the-configuration" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+  
+  <header class="md-header" data-md-component="header">
+    <nav class="md-header__inner md-grid" aria-label="header.title">
+      <!--<img src="img/linkedInBandeau.png" />-->
+      <a href=".." title="Lemniscat" class="md-header__button md-logo" aria-label="Lemniscat" data-md-component="logo">
+        
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+      </a>
+      <label class="md-header__button md-icon" for="__drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      </label>
+      <div class="md-header__title" data-md-component="header-title">
+        <div class="md-header__ellipsis">
+          <div class="md-header__topic">
+            <span class="md-ellipsis">
+              Lemniscat
+            </span>
+          </div>
+          <div class="md-header__topic" data-md-component="header-topic">
+            <span class="md-ellipsis">
+              
+                How it' works ?
+              
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
+    </nav>
+    
+  </header>
+
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Lemniscat" class="md-nav__button md-logo" aria-label="Lemniscat" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Lemniscat
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How it is ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to install ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to use ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../manifest/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to write a Manifest ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    How it' works ?
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    How it' works ?
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-load-the-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Load the configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-load-manifest-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Load manifest variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-load-the-extra-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Load the extra variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-interpete-all-the-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Interpete all the variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-define-the-steps-and-capabilities-to-execute" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Define the steps and capabilities to execute
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-read-the-manifest-file-and-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Read the manifest file (and templates)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-donwload-if-needed-the-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Donwload (if needed) the plugins
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-execute-the-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Execute the workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow execution
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-save-the-output-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Save the output context
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-load-the-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Load the configuration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-load-manifest-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Load manifest variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-load-the-extra-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Load the extra variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-interpete-all-the-variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Interpete all the variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-define-the-steps-and-capabilities-to-execute" class="md-nav__link">
+    <span class="md-ellipsis">
+      5. Define the steps and capabilities to execute
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-read-the-manifest-file-and-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      6. Read the manifest file (and templates)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-donwload-if-needed-the-plugins" class="md-nav__link">
+    <span class="md-ellipsis">
+      7. Donwload (if needed) the plugins
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-execute-the-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      8. Execute the workflow
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow execution
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-save-the-output-context" class="md-nav__link">
+    <span class="md-ellipsis">
+      9. Save the output context
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>How it' works ?</h1>
+
+<p>The runtime work in 9 steps:</p>
+<ol>
+<li><strong>Load the configuration</strong>: The runtime load the configuration files.</li>
+<li><strong>Load manifest variables</strong>: The runtime load the variables defined in the manifest file.</li>
+<li><strong>Load the extra variables</strong>: The runtime load the extra variables.</li>
+<li><strong>Interpete all the variables</strong>: The runtime interpete all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.</li>
+<li><strong>Define the steps and capabilities to execute</strong>: The runtime define the steps and capabilities to execute based on the parameters.</li>
+<li><strong>Read the manifest file (and templates)</strong>: The runtime read the manifest file to get the definition of the product to intantiate.</li>
+<li><strong>Donwload (if needed) the plugins</strong>: The runtime download the plugins needed to execute the tasks.</li>
+<li><strong>Execute the workflow</strong>: The runtime execute the workflow to activate the capabilities.</li>
+<li><strong>Save the output context</strong>: If it's defined, the runtime save the context (all variables) in the output file.</li>
+</ol>
+<h3 id="1-load-the-configuration">1. Load the configuration</h3>
+<p>The runtime load the configuration files. The configuration files are the files that contain the variables needed to instantiate the product. The order of the files is important. The variables defined in the first file can be overridden by the variables defined in the second file, and so on.</p>
+<blockquote>
+<p>[!NOTE]
+To load configuration files, you can use the <code>-c</code> or <code>--configFiles</code> parameter in the command line.</p>
+</blockquote>
+<p>For example, you can define a configuration file to define the variables decribed at project level like this :</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;projectName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;myProject&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;description&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;This is my project&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;visibility&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;private&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;organization&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;myOrganization&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;collaborators&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;user1&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;user2&quot;</span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;reader&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>And you can define a configuration file to define the variables decribed at environment level like this :</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;envName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;developement&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;location&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;West Europe&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;subscriptionId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;12345678-1234-1234-1234-123456789012&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;rgName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${{ projectName }}-${{ appName }}-${{ envName }}-rg&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;permissions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;contributor&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>After loading previous files the runtime will have the following variables :</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>projectName</td>
+<td>myProject</td>
+</tr>
+<tr>
+<td>description</td>
+<td>This is my project</td>
+</tr>
+<tr>
+<td>visibility</td>
+<td>private</td>
+</tr>
+<tr>
+<td>organization</td>
+<td>myOrganization</td>
+</tr>
+<tr>
+<td>collaborators</td>
+<td>["user1", "user2"]</td>
+</tr>
+<tr>
+<td>permissions</td>
+<td>["contributor"]</td>
+</tr>
+<tr>
+<td>envName</td>
+<td>developement</td>
+</tr>
+<tr>
+<td>location</td>
+<td>West Europe</td>
+</tr>
+<tr>
+<td>subscriptionId</td>
+<td>12345678-1234-1234-1234-123456789012</td>
+</tr>
+<tr>
+<td>rgName</td>
+<td>${{ projectName }}-${{ appName }}-${{ envName }}-rg</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-load-manifest-variables">2. Load manifest variables</h3>
+<p>After loading the configuration files, the runtime load the variables defined in the manifest file. The variables defined in the manifest file can override the variables defined in the configuration files.</p>
+<p>For example, you can define a variable to define the name of the product, like this :</p>
+<div class="highlight"><pre><span></span><code><span class="nt">variables</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">productName</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ projectName }}-${{ appName }}-${{ envName }}-app</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p>After loading the manifest file, the runtime will have the following variables :</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>projectName</td>
+<td>myProject</td>
+</tr>
+<tr>
+<td>description</td>
+<td>This is my project</td>
+</tr>
+<tr>
+<td>visibility</td>
+<td>private</td>
+</tr>
+<tr>
+<td>organization</td>
+<td>myOrganization</td>
+</tr>
+<tr>
+<td>collaborators</td>
+<td>["user1", "user2"]</td>
+</tr>
+<tr>
+<td>permissions</td>
+<td>["contributor"]</td>
+</tr>
+<tr>
+<td>envName</td>
+<td>developement</td>
+</tr>
+<tr>
+<td>location</td>
+<td>West Europe</td>
+</tr>
+<tr>
+<td>subscriptionId</td>
+<td>12345678-1234-1234-1234-123456789012</td>
+</tr>
+<tr>
+<td>rgName</td>
+<td>${{ projectName }}-${{ appName }}-${{ envName }}-rg</td>
+</tr>
+<tr>
+<td>productName</td>
+<td>${{ projectName }}-${{ appName }}-${{ envName }}-app</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-load-the-extra-variables">3. Load the extra variables</h3>
+<p>After loading the configuration files, the runtime load the extra variables. The extra variables are the override variables to use. These variables are used to override the variables defined in the configuration files.</p>
+<blockquote>
+<p>[!NOTE]
+To load extra variables, you can use the <code>-x</code> or <code>--extraVariables</code> parameter in the command line.</p>
+</blockquote>
+<p>For example, you can define a extra variable to define the name of the product, like this :</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;appName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;myApp&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>After loading the extra variables, the runtime will have the following variables :</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>projectName</td>
+<td>myProject</td>
+</tr>
+<tr>
+<td>description</td>
+<td>This is my project</td>
+</tr>
+<tr>
+<td>visibility</td>
+<td>private</td>
+</tr>
+<tr>
+<td>organization</td>
+<td>myOrganization</td>
+</tr>
+<tr>
+<td>collaborators</td>
+<td>["user1", "user2"]</td>
+</tr>
+<tr>
+<td>permissions</td>
+<td>["contributor"]</td>
+</tr>
+<tr>
+<td>envName</td>
+<td>developement</td>
+</tr>
+<tr>
+<td>location</td>
+<td>West Europe</td>
+</tr>
+<tr>
+<td>subscriptionId</td>
+<td>12345678-1234-1234-1234-123456789012</td>
+</tr>
+<tr>
+<td>rgName</td>
+<td>${{ projectName }}-${{ appName }}-${{ envName }}-rg</td>
+</tr>
+<tr>
+<td>productName</td>
+<td>${{ projectName }}-${{ appName }}-${{ envName }}-app</td>
+</tr>
+<tr>
+<td>appName</td>
+<td>myApp</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-interpete-all-the-variables">4. Interpete all the variables</h3>
+<p>After loading the extra variables, the runtime interpete all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.</p>
+<p>For example, the runtime will interpete the <code>rgName</code> variable to have the following value : <code>myProject-myApp-developement-rg</code>.
+After interpeting all the variables, the runtime will have the following variables :</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>projectName</td>
+<td>myProject</td>
+</tr>
+<tr>
+<td>description</td>
+<td>This is my project</td>
+</tr>
+<tr>
+<td>visibility</td>
+<td>private</td>
+</tr>
+<tr>
+<td>organization</td>
+<td>myOrganization</td>
+</tr>
+<tr>
+<td>collaborators</td>
+<td>["user1", "user2"]</td>
+</tr>
+<tr>
+<td>permissions</td>
+<td>["contributor"]</td>
+</tr>
+<tr>
+<td>envName</td>
+<td>developement</td>
+</tr>
+<tr>
+<td>location</td>
+<td>West Europe</td>
+</tr>
+<tr>
+<td>subscriptionId</td>
+<td>12345678-1234-1234-1234-123456789012</td>
+</tr>
+<tr>
+<td>rgName</td>
+<td>myProject-myApp-developement-rg</td>
+</tr>
+<tr>
+<td>productName</td>
+<td>myProject-myApp-developement-app</td>
+</tr>
+<tr>
+<td>appName</td>
+<td>myApp</td>
+</tr>
+</tbody>
+</table>
+<p>The interpreter can interprete <code>string</code> values, <code>int</code> values, <code>float</code> values, <code>boolean</code> values, <code>list</code> values and <code>dictionary</code> values.
+For example, if a variable contains a complex value like this :</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>complexValue</td>
+<td>{ "productName": "${{ productName }}", "envName": "${{ envName }}" }</td>
+</tr>
+</tbody>
+</table>
+<p>The interpreter will interpete the <code>complexValue</code> variable to have the following value : <code>{ "productName": "myProject-myApp-developement-app", "envName": "developement" }</code>.</p>
+<h3 id="5-define-the-steps-and-capabilities-to-execute">5. Define the steps and capabilities to execute</h3>
+<p>After interpeting all the variables, the runtime define the steps and capabilities to execute based on the parameters.</p>
+<blockquote>
+<p>[!NOTE]
+To define the steps and capabilities to execute, you can use the <code>-s</code> or <code>--steps</code> parameter in the command line.</p>
+</blockquote>
+<h3 id="6-read-the-manifest-file-and-templates">6. Read the manifest file (and templates)</h3>
+<p>After defining the steps and capabilities to execute, the runtime read the manifest file to get the definition of the product to intantiate.
+The runtime load the capabilities, the solutions, interprete templates and load the tasks to execute.</p>
+<h3 id="7-donwload-if-needed-the-plugins">7. Donwload (if needed) the plugins</h3>
+<p>After reading the manifest file, the runtime download the plugins needed to execute the tasks.
+Plugins need to be defined in the <code>requirements</code> section of the manifest file.</p>
+<h3 id="8-execute-the-workflow">8. Execute the workflow</h3>
+<p>After downloading the plugins, the runtime execute the workflow to activate the capabilities.</p>
+<blockquote>
+<p>[!NOTE]
+<strong>Activation of the capabilities</strong>
+To activate a capability you must define a variable named <code>&lt;capability&gt;.enable</code> and set to <code>true</code>.
+For example, to activate the code capability, you must define the following variable : <code>code.enable: true</code>.</p>
+<p>[!NOTE]
+<strong>Define the solution to use</strong>
+To define the solution to use to activate a capability, you must define a variable named <code>&lt;capability&gt;.solution</code> and set to the name of the solution to use.
+For example, to define Github as the solution to activate the code capability, you must define the following variable : <code>code.solution: Github</code>.</p>
+</blockquote>
+<p>For each capability enabled, the runtime execute the solution defined in variables.</p>
+<p>For each solution, the runtime execute the tasks defined.</p>
+<h3 id="workflow-execution">Workflow execution</h3>
+<p>The tasks are always executed in a specific order. The order is defined by the steps defined for each task.
+If you execute the runtime with the <code>--steps ["all:code"]</code> parameter, the runtime will execute all the tasks (exept <code>clean</code> steps) with this order :</p>
+<ol>
+<li>All tasks with the <code>pre</code> step</li>
+<li>All tasks with the <code>run</code> step</li>
+<li>All tasks with the <code>post</code> step</li>
+</ol>
+<p>If you execute the runtime with the <code>--steps ["allclean:code"]</code> parameter, the runtime will execute all the tasks (exept <code>run</code> steps) with this order :</p>
+<ol>
+<li>All tasks with the <code>pre</code> step</li>
+<li>All tasks with the <code>clean</code> step</li>
+<li>All tasks with the <code>post</code> step</li>
+</ol>
+<blockquote>
+<p>[!NOTE]
+If your task is tagged with multiple steps and the runtime is launched to execute this steps both, the task will be executed once.
+For example, if you execute the runtime with the <code>--steps ["all:code"]</code> parameter and you have a task with the steps <code>pre</code> and <code>run</code> (for exemple with Terraform init), the runtime will execute all the tasks with the <code>pre</code> step and ignore <code>run</code> step.</p>
+</blockquote>
+<p>For each task, the runtime execute the plugin defined.
+If the plugin generate output, the runtime collect the output and store it in the context (the bag of variables).</p>
+<p>For example, if you define a task to create a repository with Github, the runtime will execute the Github plugin to create the repository. If the plugin generate the repository URL, the runtime will store the <code>repositoryURL</code> variables in the context.
+So the runtime will have the following variables :</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>projectName</td>
+<td>myProject</td>
+</tr>
+<tr>
+<td>description</td>
+<td>This is my project</td>
+</tr>
+<tr>
+<td>visibility</td>
+<td>private</td>
+</tr>
+<tr>
+<td>organization</td>
+<td>myOrganization</td>
+</tr>
+<tr>
+<td>collaborators</td>
+<td>["user1", "user2"]</td>
+</tr>
+<tr>
+<td>permissions</td>
+<td>["contributor"]</td>
+</tr>
+<tr>
+<td>envName</td>
+<td>developement</td>
+</tr>
+<tr>
+<td>location</td>
+<td>West Europe</td>
+</tr>
+<tr>
+<td>subscriptionId</td>
+<td>12345678-1234-1234-1234-123456789012</td>
+</tr>
+<tr>
+<td>rgName</td>
+<td>myProject-myApp-developement-rg</td>
+</tr>
+<tr>
+<td>productName</td>
+<td>myProject-myApp-developement-app</td>
+</tr>
+<tr>
+<td>appName</td>
+<td>myApp</td>
+</tr>
+<tr>
+<td>repositoryURL</td>
+<td>https://github.com/lemniscat-devops/lemniscat.runtime.git</td>
+</tr>
+</tbody>
+</table>
+<p>After executing the plugin, the runtime interpret all the variables. If some variables can't be interpeted, the runtime keep the variable as is and continue the execution.</p>
+<h3 id="9-save-the-output-context">9. Save the output context</h3>
+<p>If it's defined, the runtime save the context (all variables interpreted) in the output file.</p>
+<blockquote>
+<p>[!NOTE]
+To save the context, you can use the <code>-o</code> or <code>--outputContext</code> parameter in the command line.</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/morisseauphi" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/pmorisseau" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      
+    
+  </body>
+</html>

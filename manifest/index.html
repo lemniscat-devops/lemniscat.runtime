@@ -1,0 +1,936 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://lemniscat-devops.github.io/lemniscat.runtime/manifest/">
+      
+      
+        <link rel="prev" href="../usage/">
+      
+      
+        <link rel="next" href="../runtime/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.13">
+    
+    
+      
+        <title>How to write a Manifest ? - Lemniscat</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7e359304.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Poppins";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@morisseauphi" />
+  <meta name="twitter:creator" content="@morisseauphi" />
+  <meta property="og:title" content="How to write a Manifest ?" />
+  <meta name="google-site-verification" content="w_wkWaWiJN0xRkstken01Q7CmA4d_jKTliKb5ilkQlU" />
+  
+  <meta property="og:image" content="https://lemniscat-devops.github.io/lemniscat.runtime/" />
+  <meta property="og:description" content="" />
+  <meta property="og:url" content="https://lemniscat-devops.github.io/lemniscat.runtime/manifest/" />
+  <meta name="Description" CONTENT="" />
+  
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-T8TQW7CYM4"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-T8TQW7CYM4');
+  </script>
+
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="amber" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#variables" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+  
+  <header class="md-header" data-md-component="header">
+    <nav class="md-header__inner md-grid" aria-label="header.title">
+      <!--<img src="img/linkedInBandeau.png" />-->
+      <a href=".." title="Lemniscat" class="md-header__button md-logo" aria-label="Lemniscat" data-md-component="logo">
+        
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+      </a>
+      <label class="md-header__button md-icon" for="__drawer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+      </label>
+      <div class="md-header__title" data-md-component="header-title">
+        <div class="md-header__ellipsis">
+          <div class="md-header__topic">
+            <span class="md-ellipsis">
+              Lemniscat
+            </span>
+          </div>
+          <div class="md-header__topic" data-md-component="header-topic">
+            <span class="md-ellipsis">
+              
+                How to write a Manifest ?
+              
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      
+      
+      
+    </nav>
+    
+  </header>
+
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Lemniscat" class="md-nav__button md-logo" aria-label="Lemniscat" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Lemniscat
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How it is ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../setup/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to install ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How to use ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    How to write a Manifest ?
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    How to write a Manifest ?
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Capabilities
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solutions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solutions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requirements
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../runtime/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    How it' works ?
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#variables" class="md-nav__link">
+    <span class="md-ellipsis">
+      Variables
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Capabilities
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solutions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Solutions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Solutions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tasks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tasks
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Tasks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#definition_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      Definition
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Requirements
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>How to write a Manifest ?</h1>
+
+<p>The manifest file is a YAML file that contains the definition of the product to deploy. It contains the following sections:</p>
+<ul>
+<li><a href="#variables"><strong>variables</strong></a>: The variables needed to deploy the product.</li>
+<li><strong>capabilities</strong>: The capabilities can be activated during the product deployment.</li>
+<li><strong>requirements</strong>: The plugins needed to execute tasks describe in the manifest file.</li>
+</ul>
+<h3 id="variables">Variables</h3>
+<p>The variables are the static parameters needed to deploy the product. They are defined in the manifest file, and can be used in the tasks to execute.
+For example, you can define a variable to define the name of the product, and use this variable in the tasks to create the product.</p>
+<p>The variables are defined in the <code>variables</code> section of the manifest file, and are defined as a dictionary with the following structure:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">variables</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">location</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">West Europe</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p>You can define in your variables a value based on another variablse. For example, you can define a variable <code>location</code> based on the environment variable <code>location</code>.
+To do that, you can use the following syntax:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">variables</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">location</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ environment.location }}</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p>You can also concatenate variables to define a new variable. For example, you can define a variable <code>resourceGroupId</code> based on the subscriptionId and the resource group name.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">variables</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">resourceGroupId</span>
+<span class="w">    </span><span class="nt">value</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;/subscriptions/${{</span><span class="nv"> </span><span class="s">env.subscriptionId</span><span class="nv"> </span><span class="s">}}/resourceGroups/${{</span><span class="nv"> </span><span class="s">rgName</span><span class="nv"> </span><span class="s">}}&#39;</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<h3 id="capabilities">Capabilities</h3>
+<p>The capabilities are the DevOps steps that can be activated during the deployment of a product. It's designed to be sure that all the DevOps aspects are covered during the design of a product.
+For each capability, you can define the <a href="#solutions">solutions</a> that need to be executed to activate the capability.
+For example, for capability code you can define Github and Gitlab as <a href="#solutions">solutions</a> to activate the capability when the product is deployed.</p>
+<p>For each capability, you can define the other capability that need to be executed before. For example, you can define the <code>operate</code> capability to be executed before the <code>code</code> capability.
+To do that ou must define the <code>dependsOn</code> parameter in the capability definition. <code>dependsOn</code> is a list of capabilities that need to be executed before the current capability. This parameter is optional.</p>
+<p>The capabilities are defined in the <code>capabilities</code> section of the manifest file, and are defined as a dictionary with the following structure:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">capabilities</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">code</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">dependsOn</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">operate</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gitlab</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">build</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jenkins</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">azuredevops</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">test</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sonarqube</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">jenkins</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">release</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">artifactory</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">azure-container-registry</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">deploy</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">azuredevops</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">argocd</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">operate</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">azure</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">aws</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">monitor</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">grafana</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">datadog</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="nt">plan</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Jira</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">PagerDuty</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<h4 id="definition">Definition</h4>
+<p>Here, the list of capabilities that you can define in the manifest file:</p>
+<ul>
+<li><code>code</code>: The capability to manage the code. For example, you can define the solutions to create a git repository, add collaborators, clone the repository, ...</li>
+<li><code>build</code>: The capability to build. For example, you can define the solutions to build with Jenkins, Azure DevOps, ...</li>
+<li><code>test</code>: The capability to test. For example, you can define the solutions to test with SonarQube, Jenkins, ...</li>
+<li><code>release</code>: The capability to release. For example, you can define the solutions to release with Artifactory, Azure Container Registry, ...</li>
+<li><code>deploy</code>: The capability to deploy. For example, you can define the solutions to deploy with Azure DevOps, ArgoCD, ...</li>
+<li><code>operate</code>: The capability to operate. For example, you can define the solutions to operate with Azure, AWS, ...</li>
+<li><code>monitor</code>: The capability to monitor. For example, you can define the solutions to monitor with Grafana, Datadog, ...</li>
+<li><code>plan</code>: The capability to plan. For example, you can define the solutions to plan with Jira, PagerDuty, ...</li>
+</ul>
+<p>Of course, you don't have to define all the capabilities in the manifest file. You can define only the capabilities that you need to or can activate during the deployment of the product.</p>
+<p>You can't define the same capability twice in the manifest file. If you define the same capability twice, the runtime will raise an error.
+You can't define a capability that is not in the list above. If you define a capability that is not in the list above, the runtime will raise an error.</p>
+<h3 id="solutions">Solutions</h3>
+<p>The solutions are the tools that can be used to execute the capabilities. For example, you can use Jenkins to execute the build capability, or you can use Ansible to execute the deployment capability.
+For each solution, you can define a workflow with the <a href="#tasks">tasks</a> that need to be executed to activate the capability.
+For example, for Azure (in operate capability), you can define the <a href="#tasks">tasks</a> that need to be executed to deploy infrastructure with Terraform.</p>
+<p>The solutions are defined in the capability section of the manifest file, and are defined as a dictionary with the following structure:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">capabilities</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">code </span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">      </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">createRepository</span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.description }}</span>
+<span class="w">            </span><span class="nt">visibility</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.visibility }}</span>
+<span class="w">            </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.organization }}</span>
+<span class="w">            </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gitlab</span>
+<span class="w">      </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">gitlab</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">createRepository</span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.description }}</span>
+<span class="w">            </span><span class="nt">visibility</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.visibility }}</span>
+<span class="w">            </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.organization }}</span>
+<span class="w">            </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ gitlab.token }}</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<h4 id="definition_1">Definition</h4>
+<p>You can define as many solutions as you want for a capability. For example, you can define Github and Gitlab as solutions for the code capability.
+You can't define the same solution twice for a capability. If you define the same solution twice for a capability, the runtime will raise an error.</p>
+<p>To define a solution, you need to define the following parameters:</p>
+<ul>
+<li><code>solution: &lt;solutionName&gt;</code>, with <code>&lt;solutionName&gt;</code> the name of the solution to use to activate the capability.</li>
+</ul>
+<p>For each solution, you can define the <a href="#tasks">tasks</a> that need to be executed to activate the capability. The tasks are defined in the <code>tasks</code> section of the solution, and are defined as a dictionary with the following structure:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">solutions</span><span class="p">:</span>
+<span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">  </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<h3 id="tasks">Tasks</h3>
+<p>The tasks are the actions that need to be executed to activate the capability. For example, you can define a task to execute a script, or a task to execute a terraform command.
+For each task, you need to tag in witch <a href="#step-concept">step</a> it needs to be executed, and the parameters that need to be used to execute the task.
+You can define many tags for a task, and the task will be executed in the same step as the tag.
+In the same step, the tasks are executed in the same order as defined in the manifest file.</p>
+<p>The tasks are defined in the solution section of the manifest file, and are defined as a dictionary with the following structure:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">capabilities</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">code </span><span class="p">:</span>
+<span class="w">    </span><span class="nt">solutions</span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solution</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">      </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Create</span><span class="nv"> </span><span class="s">repository&#39;</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">createRepository</span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">            </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.description }}</span>
+<span class="w">            </span><span class="nt">visibility</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.visibility }}</span>
+<span class="w">            </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.organization }}</span>
+<span class="w">            </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">            </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Add</span><span class="nv"> </span><span class="s">collaborators&#39;</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">addCollaborators</span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">            </span><span class="nt">collaborators</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.collaborators }}</span>
+<span class="w">            </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;clone</span><span class="nv"> </span><span class="s">repository&#39;</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">clone</span>
+<span class="w">            </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">            </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">copy</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Copy</span><span class="nv"> </span><span class="s">sample</span><span class="nv"> </span><span class="s">code&#39;</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.source }}</span>
+<span class="w">            </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Add</span><span class="nv"> </span><span class="s">files&#39;</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add</span>
+<span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Commit</span><span class="nv"> </span><span class="s">files&#39;</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">commit</span>
+<span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">            </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Initial</span><span class="nv"> </span><span class="s">commit&#39;</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Push</span><span class="nv"> </span><span class="s">files&#39;</span>
+<span class="w">          </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">            </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">          </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">            </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">push</span>
+<span class="w">            </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">            </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">      </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+<p>In order to factorize tasks in your solution, you can define templates for your tasks. For example, you can define a template to create and initialze a repository.
+To do that, you can use the following syntax in your manifest file:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">capabilities</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">code </span><span class="p">:</span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">solutions</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">      </span><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">        </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">template</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ templates.path }}/createRepository.yaml</span>
+<span class="w">          </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Create</span><span class="nv"> </span><span class="s">and</span><span class="nv"> </span><span class="s">initialize</span><span class="nv"> </span><span class="s">repository&#39;</span>
+</code></pre></div>
+<p>And in the <code>createRepository.yaml</code> file, you can define the following tasks:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">tasks</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">    </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Create</span><span class="nv"> </span><span class="s">repository&#39;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">createRepository</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.description }}</span>
+<span class="w">    </span><span class="nt">visibility</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.visibility }}</span>
+<span class="w">    </span><span class="nt">organization</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ domain.organization }}</span>
+<span class="w">    </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">    </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Add</span><span class="nv"> </span><span class="s">collaborators&#39;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">addCollaborators</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">    </span><span class="nt">collaborators</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.collaborators }}</span>
+<span class="w">    </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">github</span>
+<span class="w">    </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;clone</span><span class="nv"> </span><span class="s">repository&#39;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">run</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">clone</span>
+<span class="w">    </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.name }}</span>
+<span class="w">    </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">copy</span>
+<span class="w">    </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Copy</span><span class="nv"> </span><span class="s">sample</span><span class="nv"> </span><span class="s">code&#39;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">source</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ product.source }}</span>
+<span class="w">    </span><span class="nt">destination</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
+<span class="w">    </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Add</span><span class="nv"> </span><span class="s">files&#39;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">add</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
+<span class="w">    </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Commit</span><span class="nv"> </span><span class="s">files&#39;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">commit</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">    </span><span class="nt">message</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Initial</span><span class="nv"> </span><span class="s">commit&#39;</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">git</span>
+<span class="w">    </span><span class="nt">displayName</span><span class="p">:</span><span class="w"> </span><span class="s">&#39;Push</span><span class="nv"> </span><span class="s">files&#39;</span>
+<span class="w">    </span><span class="nt">steps</span><span class="p">:</span><span class="w"> </span>
+<span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">pre</span>
+<span class="w">    </span><span class="nt">parameters</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">action</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">push</span>
+<span class="w">    </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ currentpath }}/${{ product.name }}</span>
+<span class="w">    </span><span class="nt">token</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${{ github.token }}</span>
+</code></pre></div>
+<h4 id="definition_2">Definition</h4>
+<p>You can define as many tasks as you want for a solution. For example, you can define a task to create a repository, a task to add collaborators, a task to deploy the infrastructure, ...
+During the execution of the runtime, the tasks are executed in the same order as defined in the manifest file.</p>
+<p>To define a task, you need to define the following parameters:</p>
+<ul>
+<li><code>name: &lt;pluginName&gt;</code>, with <code>&lt;pluginName&gt;</code> the name of the plugin to execute. This parameter is mandatory.</li>
+<li><code>displayName: &lt;displayName&gt;</code>, with <code>&lt;displayName&gt;</code> the name of the task to display in the logs. This parameter is optional.</li>
+<li><code>steps: &lt;steps&gt;</code>, with <code>&lt;steps&gt;</code> the list of steps where the task needs to be executed. This parameter is mandatory.
+  For example, you can define <code>steps: ['pre', 'run']</code> to execute the task in the pre and run steps.</li>
+<li><code>parameters: &lt;parameters&gt;</code>, with <code>&lt;parameters&gt;</code> the parameters needed to execute the task. This parameter is mandatory.</li>
+<li><code>condition: &lt;condition&gt;</code>, with <code>&lt;condition&gt;</code> the condition to execute the task. This parameter is optional. The condition is a boolean expression that needs to be true to execute the task. The condition can be based on the variables defined in the manifest file.
+  For example, you can define <code>condition: "${{ productName }}" != ""</code> to execute the task only if the product name is not empty.</li>
+</ul>
+<p>You can also define a template for your tasks. For example, you can define a template to create and initialze a repository.</p>
+<p>To define a template, you need to define the following parameters:</p>
+<ul>
+<li><code>template: &lt;templatePath&gt;</code>, with <code>&lt;templatePath&gt;</code> the path to the template file to use. This parameter is mandatory.</li>
+<li><code>displayName: &lt;displayName&gt;</code>, with <code>&lt;displayName&gt;</code> the name of the task to display in the logs. This parameter is optional.</li>
+</ul>
+<h3 id="requirements">Requirements</h3>
+<p>The requirements are the plugins needed to execute tasks describe in the manifest file. They are defined in the <code>requirements</code> section of the manifest file, and are defined as a dictionary with the following structure:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">requirements</span><span class="p">:</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lemniscat.plugin.azurecli</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lemniscat.plugin.github</span>
+<span class="w">    </span><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.0.0</span>
+<span class="w">    </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">...</span>
+</code></pre></div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/morisseauphi" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/pmorisseau" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8d2eff1.min.js"></script>
+      
+    
+  </body>
+</html>
