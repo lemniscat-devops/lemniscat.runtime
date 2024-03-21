@@ -114,8 +114,8 @@ class Solution:
     def run_tasks(self) -> List[Task]:
         return [task for task in self.tasks if 'run' in task.steps and task.status == 'Pending']
 
-    def decom_tasks(self) -> List[Task]:
-        return [task for task in self.tasks if 'decom' in task.steps and task.status == 'Pending']
+    def clean_tasks(self) -> List[Task]:
+        return [task for task in self.tasks if 'clean' in task.steps and task.status == 'Pending']
     
     def post_tasks(self) -> List[Task]:
         return [task for task in self.tasks if 'post' in task.steps and task.status == 'Pending']

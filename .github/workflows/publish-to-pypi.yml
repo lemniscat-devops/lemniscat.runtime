@@ -26,6 +26,8 @@ jobs:
       run: |
         $data = Get-Content -Path .\src\lemniscat\runtime\version.py -Raw
         $data = $data -replace "__version__ = '0.0.1'", "__version__ = '$($env:GitVersion_MajorMinorPatch)'"
+        $release_date = Get-Date -Format "yyyy-MM-dd"
+        $data = $data -replace "__release_date__ = '2023-12-31'", "__release_date__ = '$release_date'"
         $data | Set-Content -Path .\src\lemniscat\runtime\version.py
     - name: Set version in pyproject.toml for main branch
       shell: pwsh
@@ -33,6 +35,8 @@ jobs:
       run: |
         $data = Get-Content -Path .\pyproject.toml -Raw
         $data = $data -replace 'version = "0.0.1"', "version = ""$($env:GitVersion_MajorMinorPatch)"""
+        $release_date = Get-Date -Format "yyyy-MM-dd"
+        $data = $data -replace "__release_date__ = '2023-12-31'", "__release_date__ = '$release_date'"
         $data | Set-Content -Path .\pyproject.toml
     - name: Set version in pyproject.toml for feat/fix branch
       shell: pwsh

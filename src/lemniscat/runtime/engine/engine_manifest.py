@@ -39,5 +39,5 @@ class StepsParser:
     def get_post(self, capability: str) -> bool:
         return bool(any(item in f'{capability}.post' for item in self._steps))
     
-    def get_decom(self, capability: str) -> bool:
-        return bool(any(item in f'{capability}.decom' for item in self._steps))  
+    def get_clean(self, capability: str) -> bool:
+        return bool(any(item in f'{capability}.clean' for item in self._steps))  
