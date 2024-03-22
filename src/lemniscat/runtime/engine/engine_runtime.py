@@ -72,7 +72,7 @@ class OrchestratorEngine:
         solution.status = 'Running'
         self.__runTasks('pre', capability, solution)
         self.__runTasks('run', capability, solution)
-        self.__runTasks('decom', capability, solution)
+        self.__runTasks('clean', capability, solution)
         self.__runTasks('post', capability, solution)  
      
     def __runCapabilities(self) -> None: 

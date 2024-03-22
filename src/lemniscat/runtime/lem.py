@@ -12,11 +12,11 @@ if os.environ.get('LEM_DEBUG') == '1':
 from lemniscat.runtime.engine.engine_runtime import OrchestratorEngine
 
 def __description() -> str:
-    return "Create your own anime meta data"
+    return "Lemniscat is a simple and lightweight orchestrator for running a sequence of tasks. It is designed to be used in a CI/CD pipeline, but can be used for any other purpose as well. It is designed to be simple and easy to use, but also powerful and flexible."
 
 
 def __usage() -> str:
-    return "vrv-meta.py --service vrv"
+    return "lem --manifest [path to your manifest file] --steps [list of steps to execute]"
 
 def __init_cli() -> argparse:
     parser = argparse.ArgumentParser(description=__description(), usage=__usage())
