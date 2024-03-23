@@ -71,9 +71,11 @@ class OrchestratorEngine:
     def __runSolution(self, capability: str, solution: Solution) -> None:
         solution.status = 'Running'
         self.__runTasks('pre', capability, solution)
+        self.__runTasks('pre-clean', capability, solution)
         self.__runTasks('run', capability, solution)
-        self.__runTasks('clean', capability, solution)
-        self.__runTasks('post', capability, solution)  
+        self.__runTasks('run-clean', capability, solution)
+        self.__runTasks('post', capability, solution)
+        self.__runTasks('post-clean', capability, solution)
      
     def __runCapabilities(self) -> None: 
         for capability in self._capabilities.order:

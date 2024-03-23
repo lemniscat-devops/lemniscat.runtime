@@ -19,7 +19,7 @@ class StepsParser:
             if(parts[0] == 'all'):
                 steps = ['pre', 'run', 'post']
             if(parts[0] == 'allclean'):
-                steps = ['pre', 'clean', 'post']
+                steps = ['pre-clean', 'run-clean', 'post-clean']
             else:
                 steps = [parts[0]]
                 
@@ -38,6 +38,12 @@ class StepsParser:
     
     def get_post(self, capability: str) -> bool:
         return bool(any(item in f'{capability}.post' for item in self._steps))
+
+    def get_preclean(self, capability: str) -> bool:
+        return bool(any(item in f'{capability}.pre-clean' for item in self._steps))    
     
-    def get_clean(self, capability: str) -> bool:
-        return bool(any(item in f'{capability}.clean' for item in self._steps))  
+    def get_runclean(self, capability: str) -> bool:
+        return bool(any(item in f'{capability}.run-clean' for item in self._steps)) 
+     
+    def get_postclean(self, capability: str) -> bool:
+        return bool(any(item in f'{capability}.post-clean' for item in self._steps)) 
