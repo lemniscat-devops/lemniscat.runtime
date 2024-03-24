@@ -73,8 +73,10 @@ def __init_app(parameters: dict) -> None:
     print(f"----------------- version {__version__} - {__release_date__} -----------------")
     print("--------------------------------------------------------------")
     print("")
-    OrchestratorEngine(options=parameters).start()
+    status = OrchestratorEngine(options=parameters).start()
     __print_program_end()
+    if(status == 'Failed'):
+        exit(1)
 
 def lem() -> None:
     __cli_args = __init_cli().parse_args()

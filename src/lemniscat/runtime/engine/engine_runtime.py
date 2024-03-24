@@ -77,12 +77,14 @@ class OrchestratorEngine:
         self.__runTasks('post', capability, solution)
         self.__runTasks('post-clean', capability, solution)
      
-    def __runCapabilities(self) -> None: 
+    def __runCapabilities(self) -> str:
+        status = 'Finished' 
         for capability in self._capabilities.order:
             status = self.__runCapability(capability, self._capabilities.capability[capability])  
             if(status == 'Failed'):
                 self._logger.error(f'Capability: {capability} failed')
                 break 
+        return status
      
     def __runCapability(self, current: str, capability: Optional[List[Solution]]) -> str:
         status = 'Finished'
@@ -103,14 +105,15 @@ class OrchestratorEngine:
             self._logger.debug(f'Skipping capability: {current}')
         return status
 
-    def start(self) -> None:
+    def start(self) -> str:
         self.__reload_plugins()
-        self.__runCapabilities()
+        status = self.__runCapabilities()
   
         if(self._outputContextPath is not None):
             self._logger.info(f"Saving output context...")
             self._bagOfVariables.save(self._outputContextPath)
             self._logger.info(f"Output context saved to: {self._outputContextPath}")
+        return status
 
     def __reload_plugins(self) -> None:
         """Reset the list of all plugins and initiate the walk over the main
