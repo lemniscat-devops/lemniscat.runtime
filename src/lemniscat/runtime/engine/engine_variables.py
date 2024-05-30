@@ -22,11 +22,17 @@ class BagOfVariables:
         configFiles = ast.literal_eval(conf)
         for file in configFiles:
             self._logger.debug(f"Loading variables from file: {file}...")
-            with open(file, 'r') as f:
-                variables = json.load(f)
-            for key in variables:
-                self._variables[key] = VariableValue(variables[key])
-            self._logger.debug(f"{len(variables)} loaded.")    
+            if(file.endswith('.json')):
+                with open(file, 'r') as f:
+                    variables = json.load(f)
+                for key in variables:
+                    self._variables[key] = VariableValue(variables[key])
+                self._logger.debug(f"{len(variables)} loaded.")
+            if(file.endswith('.yaml') or file.endswith('.yml')):
+                variables = FileSystem.load_configuration_path(file)
+                for key in variables:
+                    self._variables[key] = VariableValue(variables[key])
+                self._logger.debug(f"{len(variables)} loaded.")
         
         self._logger.debug(f"Loading variables from manifest...")
         self.__append_manifestVariables(args[0]['manifest'])
