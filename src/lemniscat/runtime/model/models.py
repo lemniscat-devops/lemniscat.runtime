@@ -94,7 +94,10 @@ class Template:
         result = []
         for task in tasks['tasks']:
             task['prefix'] = self.displayName
-            result.append(Task(**task))           
+            if(dict(task).keys().__contains__('template')):
+                result.extend(Template(self._variables, **task).getTasks())
+            else:
+                result.append(Task(**task))              
         return result
 
 @dataclass
