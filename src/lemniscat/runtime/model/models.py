@@ -88,13 +88,18 @@ class Template:
         if(kwargs.__contains__('displayName')):
             val = kwargs['displayName']
             self.displayName = f'[{val}] '
+        if(kwargs.__contains__('prefix')):
+            val = kwargs['prefix']
+            self.displayName = f'{val}{self.displayName}'
     
     def getTasks(self) -> List[Task]:
         tasks = FileSystem.load_configuration_path(self.path)
+        Interpreter(LogUtil.root, self._variables).interpretDict(tasks)
         result = []
         for task in tasks['tasks']:
             task['prefix'] = self.displayName
             if(dict(task).keys().__contains__('template')):
+
                 result.extend(Template(self._variables, **task).getTasks())
             else:
                 result.append(Task(**task))              
