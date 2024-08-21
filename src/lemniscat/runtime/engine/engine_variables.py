@@ -113,5 +113,8 @@ class BagOfVariables:
     def interpretCondition(self, condition: str) -> str:
         return self._interpeter.interpretString(condition, "condition")
 
+    def interpretEvalCondition(self, condition) -> bool:
+        return self._interpeter.interpretEvalCondition(condition)
+
     def __str__(self) -> str:
         return f'{self._variables}'

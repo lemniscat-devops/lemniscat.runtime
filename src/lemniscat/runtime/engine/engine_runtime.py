@@ -6,6 +6,7 @@ from .engine_variables import BagOfVariables
 from lemniscat.runtime.plugin.pluginmanager import PluginManager
 from lemniscat.core.util.helpers import LogUtil, FileSystem
 from lemniscat.core.model import TaskResult
+from lemniscat.core.model import VariableValue
 from lemniscat.runtime.model.models import Capabilities, Solution, Task
 from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError, WrongTypeError, from_dict
 import ast
@@ -32,7 +33,6 @@ class OrchestratorEngine:
         try:
             manifest_data = FileSystem.load_configuration_path(manifest_path)
             capabilitiesData = manifest_data["capabilities"]
-            capabilitiesData = self._bagOfVariables.interpretManifest(capabilitiesData)
             capabilities = Capabilities(self._bagOfVariables._variables, **capabilitiesData)
             return capabilities
         except FileNotFoundError as e:
@@ -45,8 +45,7 @@ class OrchestratorEngine:
         if(condition is None):
             return True
         if(isinstance(condition, str)):
-            condition = self._bagOfVariables.interpretCondition(condition)
-            return eval(condition)
+            return self._bagOfVariables.interpretEvalCondition(condition)
     
     def __runTasks(self, step: str, capability: str, solution: Solution) -> None:
         if(solution.status == 'Failed'):
