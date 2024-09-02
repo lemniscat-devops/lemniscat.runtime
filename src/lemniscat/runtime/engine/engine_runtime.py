@@ -33,6 +33,7 @@ class OrchestratorEngine:
         try:
             manifest_data = FileSystem.load_configuration_path(manifest_path)
             capabilitiesData = manifest_data["capabilities"]
+            capabilitiesData = self._bagOfVariables.interpretManifest(capabilitiesData, excludeInterpret=['condition'])
             capabilities = Capabilities(self._bagOfVariables._variables, **capabilitiesData)
             return capabilities
         except FileNotFoundError as e:

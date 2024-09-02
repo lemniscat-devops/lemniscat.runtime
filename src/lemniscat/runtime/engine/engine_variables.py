@@ -104,11 +104,11 @@ class BagOfVariables:
         with open(filePath, 'w') as f:
             json.dump(output, f)  
         
-    def interpret(self) -> None:
-        self._interpeter.interpret()
+    def interpret(self, excludeInterpret: list = []) -> None:
+        self._interpeter.interpret(excludeInterpret)
         
-    def interpretManifest(self, manifest: dict) -> dict:
-        return self._interpeter.interpretDict(manifest, "manifest")        
+    def interpretManifest(self, manifest: dict, excludeInterpret: list = []) -> dict:
+        return self._interpeter.interpretDict(manifest, "manifest", excludeInterpret)        
 
     def interpretCondition(self, condition: str) -> str:
         return self._interpeter.interpretString(condition, "condition")
