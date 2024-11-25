@@ -15,38 +15,63 @@ class BagOfVariables:
     _variables: dict = {}
 
     def __init__(self, logger, *args) -> None:
-        
         self._logger = logger
-        self._logger.info("Loading variables")
-        conf = args[0]['configFiles']
-        configFiles = ast.literal_eval(conf)
-        for file in configFiles:
-            self._logger.debug(f"Loading variables from file: {file}...")
-            if(file.endswith('.json')):
-                with open(file, 'r') as f:
-                    variables = json.load(f)
-                for key in variables:
-                    self._variables[key] = VariableValue(variables[key])
+        self._variables = {}
+
+        try:
+            self._logger.info("Loading variables")
+            conf = args[0]['configFiles']
+            try:
+                configFiles = ast.literal_eval(conf)
+            except (ValueError, SyntaxError) as e:
+                self._logger.error(f"Error parsing config files: {e}")
+                configFiles = []
+
+            for file in configFiles:
+                self._logger.debug(f"Loading variables from file: {file}...")
+                try:
+                    if file.endswith('.json'):
+                        with open(file, 'r') as f:
+                            variables = json.load(f)
+                        for key in variables:
+                            self._variables[key] = VariableValue(variables[key])
+                        self._logger.debug(f"{len(variables)} loaded.")
+                    if file.endswith('.yaml') or file.endswith('.yml'):
+                        variables = FileSystem.load_configuration_path(file)
+                        for key in variables:
+                            self._variables[key] = VariableValue(variables[key])
+                        self._logger.debug(f"{len(variables)} loaded.")
+                except Exception as e:
+                    try:
+                        with open(file, 'r') as f:
+                            file_content = f.read()
+                        self._logger.error(f"Error loading file {file}: {e}\nFile content:\n{file_content}")
+                    except Exception as read_error:
+                        self._logger.error(f"Error reading file {file} for content display: {read_error}")
+
+            self._logger.debug(f"Loading variables from manifest...")
+            try:
+                self.__append_manifestVariables(args[0]['manifest'])
                 self._logger.debug(f"{len(variables)} loaded.")
-            if(file.endswith('.yaml') or file.endswith('.yml')):
-                variables = FileSystem.load_configuration_path(file)
-                for key in variables:
-                    self._variables[key] = VariableValue(variables[key])
-                self._logger.debug(f"{len(variables)} loaded.")
-        
-        self._logger.debug(f"Loading variables from manifest...")
-        self.__append_manifestVariables(args[0]['manifest'])
-        self._logger.debug(f"{len(variables)} loaded.")
-        
-        self._logger.debug(f"Override variables from parameters...")
-        override = json.loads(args[0]['extraVariables'])        
-        if(override != None):
-            for key in override:
-                self._variables[key] = VariableValue(override[key])
-            self._logger.debug(f"{len(override)} loaded.")
-        self._interpeter = Interpreter(logger, self._variables)
-        self._interpeter.interpret(); 
-        self._logger.info("Variables loaded")
+            except Exception as e:
+                self._logger.error(f"Error loading manifest variables: {e}")
+
+            self._logger.debug(f"Override variables from parameters...")
+            try:
+                override = json.loads(args[0]['extraVariables'])        
+                if override is not None:
+                    for key in override:
+                        self._variables[key] = VariableValue(override[key])
+                    self._logger.debug(f"{len(override)} loaded.")
+            except json.JSONDecodeError as e:
+                self._logger.error(f"Error parsing extra variables: {e}")
+
+            self._interpeter = Interpreter(logger, self._variables)
+            self._interpeter.interpret()
+            self._logger.info("Variables loaded")
+
+        except Exception as e:
+            self._logger.error(f"Unexpected error in initialization: {e}")
         
     def __append_manifestVariables(self, manifest_path) -> None:
         try:
