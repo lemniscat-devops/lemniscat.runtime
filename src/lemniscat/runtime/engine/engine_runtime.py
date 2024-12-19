@@ -90,10 +90,10 @@ class OrchestratorEngine:
         status = 'Finished'
         self._logger.info(f'🦾 Running capability: {current}')
         if(not capability is None): 
-            isEnable = self._bagOfVariables.get(f"{current}.enable")
+            isEnable = self._bagOfVariables.get(f"{current}_enable")
             if(isEnable.value == True):
                 for solution in capability:
-                    if(self._bagOfVariables.get(f"{current}.solution").value == solution.name):
+                    if(self._bagOfVariables.get(f"{current}_solution").value == solution.name):
                         self._logger.info(f' |->💡 Running solution: {solution.name}')
                         self.__runSolution(current, solution)
                     else:
