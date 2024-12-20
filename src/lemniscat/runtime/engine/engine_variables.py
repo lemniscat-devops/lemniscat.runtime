@@ -14,6 +14,17 @@ class BagOfVariables:
     _interpeter: Interpreter
     _variables: dict = {}
 
+    def __loadVariables__(self, key: str, variable) -> None:
+        if isinstance(variable, dict):
+            if '~object' in variable.keys() and variable['~object'] == True:
+                variable.pop('~object')
+                self._variables[key] = VariableValue(variable)
+            else:
+                for subKey in variable:
+                    self.__loadVariables__(f'{key}_{subKey}', variable[subKey])
+        else:    
+            self._variables[key] = VariableValue(variable)
+
     def __init__(self, logger, *args) -> None:
         self._logger = logger
         self._variables = {}
@@ -34,12 +45,12 @@ class BagOfVariables:
                         with open(file, 'r') as f:
                             variables = json.load(f)
                         for key in variables:
-                            self._variables[key] = VariableValue(variables[key])
+                            self.__loadVariables__(key, variables[key])
                         self._logger.debug(f"{len(variables)} loaded.")
                     if file.endswith('.yaml') or file.endswith('.yml'):
                         variables = FileSystem.load_configuration_path(file)
                         for key in variables:
-                            self._variables[key] = VariableValue(variables[key])
+                            self.__loadVariables__(key, variables[key])
                         self._logger.debug(f"{len(variables)} loaded.")
                 except Exception as e:
                     try:
