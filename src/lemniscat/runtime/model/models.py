@@ -146,6 +146,43 @@ class Solution:
         self.status = 'Pending'
 
 @dataclass
+class Phase:
+    id: str
+    status: str
+    tasks: Optional[List[Task]]
+    
+    def tasks_byStep(self, step: str) -> List[Task]:
+        return [task for task in self.tasks if step in task.steps and task.status == 'Pending']
+    
+    def pre_tasks(self) -> List[Task]:
+        return [task for task in self.tasks if 'pre' in task.steps and task.status == 'Pending']
+    
+    def run_tasks(self) -> List[Task]:
+        return [task for task in self.tasks if 'run' in task.steps and task.status == 'Pending']
+    
+    def post_tasks(self) -> List[Task]:
+        return [task for task in self.tasks if 'post' in task.steps and task.status == 'Pending']
+
+    def preclean_tasks(self) -> List[Task]:
+        return [task for task in self.tasks if 'pre-clean' in task.steps and task.status == 'Pending']
+
+    def runclean_tasks(self) -> List[Task]:
+        return [task for task in self.tasks if 'run-clean' in task.steps and task.status == 'Pending']
+
+    def postclean_tasks(self) -> List[Task]:
+        return [task for task in self.tasks if 'post-clean' in task.steps and task.status == 'Pending']
+    
+    def __init__(self, variables: dict, **kwargs) -> None:
+        self.tasks = []
+        for task in kwargs['tasks']:
+            if(dict(task).keys().__contains__('template')):
+                self.tasks.extend(Template(variables, **task).getTasks())
+            else:
+                self.tasks.append(Task(**task))    
+        self.id = str(uuid.uuid4())
+        self.status = 'Pending'
+
+@dataclass
 class Capabilities:
     capability: dict
     order: List[str] = None
@@ -214,5 +251,7 @@ class Capabilities:
 
 @dataclass
 class Manifest:
+    pre: Optional[List[Task]]
     capabilities: Capabilities
+    post: Optional[List[Task]]
     requirements: Optional[List[DependencyModule]] = None
