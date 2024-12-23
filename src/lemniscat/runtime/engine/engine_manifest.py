@@ -12,9 +12,9 @@ class StepsParser:
             parts = step.split(':')
             
             if(parts[1] == 'all'):
-                capabilities = ['code', 'build', 'test', 'deploy', 'release', 'operate', 'monitor', 'plan']
+                capabilities = ['global', 'code', 'build', 'test', 'deploy', 'release', 'operate', 'monitor', 'plan']
             else:
-                capabilities = [parts[1]]
+                capabilities = ['global', parts[1]]
             
             if(parts[0] == 'all'):
                 steps = ['pre', 'run', 'post']
