@@ -1,15 +1,13 @@
 from logging import Logger
 from typing import List, Optional
-
 from .engine_manifest import StepsParser
 from .engine_variables import BagOfVariables
 from lemniscat.runtime.plugin.pluginmanager import PluginManager
 from lemniscat.core.util.helpers import LogUtil, FileSystem
 from lemniscat.core.model import TaskResult
-from lemniscat.runtime.model.models import Capabilities, Solution, Task, Phase
-from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError, WrongTypeError, from_dict
+from lemniscat.runtime.model.models import Capabilities, Solution, Phase
+from dacite import ForwardReferenceError, MissingValueError, UnexpectedDataError, WrongTypeError
 import ast
-import re
 
 class OrchestratorEngine:
     """The orchestrator engine is the main entry point for the application"""
@@ -34,17 +32,17 @@ class OrchestratorEngine:
         try:
             manifest_data = FileSystem.load_configuration_path(manifest_path)
             capabilitiesData = manifest_data["capabilities"]
-            capabilitiesData = self._bagOfVariables.interpretManifest(capabilitiesData)
+            capabilitiesData = self._bagOfVariables.interpretManifest(capabilitiesData, excludeInterpret=['condition'])
             self._capabilities = Capabilities(self._bagOfVariables._variables, **capabilitiesData)
             if(manifest_data.get("pre")):
                 preTasks = manifest_data["pre"]
-                preTasks = self._bagOfVariables.interpretManifest(preTasks)
+                preTasks = self._bagOfVariables.interpretManifest(preTasks, excludeInterpret=['condition'])
                 self._preTasks = Phase(self._bagOfVariables._variables, **preTasks)
             else:
                 self._preTasks = None
             if(manifest_data.get("post")):
                 postTasks = manifest_data["post"]
-                postTasks = self._bagOfVariables.interpretManifest(postTasks)
+                postTasks = self._bagOfVariables.interpretManifest(postTasks, excludeInterpret=['condition'])
                 self._postTasks = Phase(self._bagOfVariables._variables, **postTasks)
             else:
                 self._postTasks = None
@@ -58,8 +56,7 @@ class OrchestratorEngine:
         if(condition is None):
             return True
         if(isinstance(condition, str)):
-            condition = self._bagOfVariables.interpretCondition(condition)
-            return eval(condition)
+            return self._bagOfVariables.interpretEvalCondition(condition)
     
     def __runTasks(self, step: str, capability: str, solution: Solution) -> None:
         if(solution.status == 'Failed'):
@@ -135,10 +132,10 @@ class OrchestratorEngine:
         status = 'Finished'
         self._logger.info(f'🦾 Running capability: {current}')
         if(not capability is None): 
-            isEnable = self._bagOfVariables.get(f"{current}_enable")
+            isEnable = self._bagOfVariables.get(f"{current}_enable") or self._bagOfVariables.get(f"{current}.enable")
             if(isEnable.value == True):
                 for solution in capability:
-                    if(self._bagOfVariables.get(f"{current}_solution").value == solution.name):
+                    if(self._bagOfVariables.get(f"{current}_solution").value == solution.name or self._bagOfVariables.get(f"{current}.solution").value == solution.name):
                         self._logger.info(f' |->💡 Running solution: {solution.name}')
                         self.__runSolution(current, solution)
                     else:
