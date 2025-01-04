@@ -92,7 +92,7 @@ class Template:
     
     def getTasks(self) -> List[Task]:
         tasks = FileSystem.load_configuration_path(self.path)
-        Interpreter(LogUtil.root, self._variables).interpretDict(tasks)
+        Interpreter(LogUtil.root, self._variables).interpretDict(tasks, excludeInterpret=['condition'])
         result = []
         for task in tasks['tasks']:
             task['prefix'] = self.displayName
