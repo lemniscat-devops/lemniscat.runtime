@@ -131,6 +131,7 @@ class OrchestratorEngine:
     def __runCapability(self, current: str, capability: Optional[List[Solution]]) -> str:
         status = 'Finished'
         self._logger.info(f'🦾 Running capability: {current}')
+        self._bagOfVariables.set("capability", f"{current}")
         if(not capability is None): 
             isEnable = self._bagOfVariables.get(f"{current}_enable") or self._bagOfVariables.get(f"{current}.enable")
             if(isEnable.value == True):

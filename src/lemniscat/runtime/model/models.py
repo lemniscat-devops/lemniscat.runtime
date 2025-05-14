@@ -78,6 +78,7 @@ class Task:
 class Template:
     path: str
     displayName: str = None
+    condition: str = None
     _variables: dict = None
     
     def __init__(self, variables: dict, **kwargs) -> None:
@@ -89,6 +90,8 @@ class Template:
         if(kwargs.__contains__('prefix')):
             val = kwargs['prefix']
             self.displayName = f'{val}{self.displayName}'
+        if(kwargs.__contains__('condition')):
+            self.condition = kwargs['condition']
     
     def getTasks(self) -> List[Task]:
         tasks = FileSystem.load_configuration_path(self.path)
@@ -96,6 +99,8 @@ class Template:
         result = []
         for task in tasks['tasks']:
             task['prefix'] = self.displayName
+            if(self.condition is not None):
+                task['condition'] = self.condition
             if(dict(task).keys().__contains__('template')):
 
                 result.extend(Template(self._variables, **task).getTasks())
