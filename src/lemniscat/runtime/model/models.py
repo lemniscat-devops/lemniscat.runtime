@@ -99,6 +99,11 @@ class Template:
         result = []
         for task in tasks['tasks']:
             task['prefix'] = self.displayName
+            if(self.condition is not None and task.__contains__('condition')):
+                task['condition'] = "(" + self.condition + ") & (" + task['condition'] + ")"
+            elif(self.condition is not None):
+                task['condition'] = self.condition
+                
             if(dict(task).keys().__contains__('template')):
                 result.extend(Template(self._variables, **task).getTasks())
             else:
