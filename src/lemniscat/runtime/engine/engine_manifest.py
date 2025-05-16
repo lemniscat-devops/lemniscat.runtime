@@ -4,6 +4,7 @@ from typing import List
 class StepsParser:
     """The steps parser is responsible for parsing the steps"""
     _steps: List[str] = []
+    isCleanSteps: bool = False
     _logger : Logger
 
     def __init__(self, logger: Logger, steps: List[str]) -> None:
@@ -20,8 +21,12 @@ class StepsParser:
                 steps = ['pre', 'run', 'post']
             elif(parts[0] == 'allclean'):
                 steps = ['pre-clean', 'run-clean', 'post-clean']
+                self.isCleanSteps = True
             else:
                 steps = [parts[0]]
+                
+            if(parts[0] == 'pre-clean' or parts[0] == 'run-clean' or parts[0] == 'post-clean'):
+                self.isCleanSteps = True
                 
             for capability in capabilities:
                 for step in steps:

@@ -120,8 +120,12 @@ class OrchestratorEngine:
         return status 
      
     def __runCapabilities(self) -> str:
-        status = 'Finished' 
-        for capability in self._capabilities.order:
+        status = 'Finished'
+        capabilities = self._capabilities.order
+        if(self._steps.isCleanSteps):
+            capabilities.reverse()
+            
+        for capability in capabilities:
             status = self.__runCapability(capability, self._capabilities.capability[capability])  
             if(status == 'Failed'):
                 self._logger.error(f'Capability: {capability} failed')
