@@ -164,6 +164,7 @@ class OrchestratorEngine:
   
         if(self._outputContextPath is not None):
             self._logger.info(f"Saving output context...")
+            self._bagOfVariables.remove("capability")
             self._bagOfVariables.save(self._outputContextPath)
             self._logger.info(f"Output context saved to: {self._outputContextPath}")
         return status

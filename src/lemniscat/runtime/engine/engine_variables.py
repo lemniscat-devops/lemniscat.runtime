@@ -131,6 +131,12 @@ class BagOfVariables:
     def append(self, variables: dict) -> None:
         self._variables.update(variables)
         
+    def remove(self, key: str) -> None:
+        if key in self._variables:
+            del self._variables[key]
+        else:
+            self._logger.error(f"Variable '{key}' not found")
+        
     def save(self, filePath: str) -> None:
         output = {}
         for key in self._variables:
